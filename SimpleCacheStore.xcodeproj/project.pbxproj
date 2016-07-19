@@ -7,13 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C56BA4B81D3EA78200263ECE /* SCCoreDataWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4B71D3EA78200263ECE /* SCCoreDataWalker.swift */; };
+		C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */; };
+		C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */; };
+		C56BA4CA1D3ECAB900263ECE /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */; };
+		C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4D81D3ED52500263ECE /* SCCacheManager.swift */; };
 		C593162B1D3958FA00C3424C /* SimpleCacheStore.h in Headers */ = {isa = PBXBuildFile; fileRef = C593162A1D3958FA00C3424C /* SimpleCacheStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C59316331D39591600C3424C /* SCCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59316321D39591600C3424C /* SCCoreDataManager.swift */; };
+		C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */; };
+		C593163C1D395AD100C3424C /* CacheObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C593163A1D395AD100C3424C /* CacheObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C56BA4B71D3EA78200263ECE /* SCCoreDataWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCoreDataWalker.swift; sourceTree = "<group>"; };
+		C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGlobalOptions.swift; sourceTree = "<group>"; };
+		C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCManager.swift; sourceTree = "<group>"; };
+		C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHandler.swift; sourceTree = "<group>"; };
+		C56BA4D81D3ED52500263ECE /* SCCacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCacheManager.swift; sourceTree = "<group>"; };
 		C59316271D3958FA00C3424C /* SimpleCacheStore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SimpleCacheStore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C593162A1D3958FA00C3424C /* SimpleCacheStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleCacheStore.h; sourceTree = "<group>"; };
 		C593162C1D3958FA00C3424C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C59316321D39591600C3424C /* SCCoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCoreDataManager.swift; sourceTree = "<group>"; };
+		C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleCache.xcdatamodel; sourceTree = "<group>"; };
+		C593163A1D395AD100C3424C /* CacheObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheObject.swift; path = ../CacheObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +43,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C56BA4BB1D3EB68600263ECE /* SCCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				C59316321D39591600C3424C /* SCCoreDataManager.swift */,
+				C56BA4B71D3EA78200263ECE /* SCCoreDataWalker.swift */,
+				C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */,
+			);
+			name = SCCoreData;
+			sourceTree = "<group>";
+		};
+		C56BA4BC1D3EB69D00263ECE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C593162C1D3958FA00C3424C /* Info.plist */,
+				C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C56BA4BD1D3EB6B000263ECE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C593163A1D395AD100C3424C /* CacheObject.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		C56BA4D71D3ED51100263ECE /* SCCache */ = {
+			isa = PBXGroup;
+			children = (
+				C56BA4D81D3ED52500263ECE /* SCCacheManager.swift */,
+			);
+			name = SCCache;
+			sourceTree = "<group>";
+		};
 		C593161D1D3958F900C3424C = {
 			isa = PBXGroup;
 			children = (
@@ -47,7 +98,12 @@
 			isa = PBXGroup;
 			children = (
 				C593162A1D3958FA00C3424C /* SimpleCacheStore.h */,
-				C593162C1D3958FA00C3424C /* Info.plist */,
+				C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */,
+				C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */,
+				C56BA4D71D3ED51100263ECE /* SCCache */,
+				C56BA4BB1D3EB68600263ECE /* SCCoreData */,
+				C56BA4BD1D3EB6B000263ECE /* Models */,
+				C56BA4BC1D3EB69D00263ECE /* Supporting Files */,
 			);
 			path = SimpleCacheStore;
 			sourceTree = "<group>";
@@ -130,6 +186,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C56BA4CA1D3ECAB900263ECE /* CoreDataHandler.swift in Sources */,
+				C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */,
+				C56BA4B81D3EA78200263ECE /* SCCoreDataWalker.swift in Sources */,
+				C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */,
+				C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */,
+				C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */,
+				C593163C1D395AD100C3424C /* CacheObject.swift in Sources */,
+				C59316331D39591600C3424C /* SCCoreDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +294,7 @@
 		C59316301D3958FA00C3424C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -240,12 +305,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MK.SimpleCacheStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		C59316311D3958FA00C3424C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -278,8 +345,22 @@
 				C59316311D3958FA00C3424C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */,
+			);
+			currentVersion = C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */;
+			path = SimpleCache.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C593161E1D3958F900C3424C /* Project object */;
 }
