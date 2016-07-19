@@ -9,6 +9,7 @@
 import Foundation
 
 class SCGlobalOptions {
+    
     struct Options {
         static var expiringDate: NSDate = NSDate()
     }

@@ -21,7 +21,7 @@ public class SCManager {
     public init(expiringDate: NSDate) {
         SCGlobalOptions.Options.expiringDate = expiringDate
         coreDataWalker = SCCoreDataWalker()
-        coreDataWalker?.cleanCache()
+        //coreDataWalker?.cleanCache()
         coreDataManger = SCCoreDataManager()
         cacheManager = SCCacheManager()
     }
@@ -41,10 +41,23 @@ public class SCManager {
         }
     }
     
+    public func save(forKey: String, object: NSObject) -> Bool {
+        if let cdm = coreDataManger {
+            if cdm.saveObject(forKey, object: object) {
+                if let cam = self.cacheManager {
+                    cam.saveObjectToCache(forKey, object: object)
+                    print("[SCManager:save] -> Objekt in NSCache gelegt")
+                }
+                return true
+            }
+        }
+        return false
+    }
+    
     public func get(forKey: String, answer: (Bool, NSObject?) -> ()) {
         if let cam = cacheManager {
             if let cachedObj = cam.getObjectFromCache(forKey) {
-                print("[SCManager:get] -> Objekt erstmals in NSCache gelegt")
+                print("[SCManager:get] -> Objekt aus NSCache geladen")
                 answer(true, cachedObj)
             } else {
                 if let cdm = coreDataManger {
@@ -63,6 +76,25 @@ public class SCManager {
                 })
             }
         }
+    }
+    
+    public func get(forKey: String) -> NSObject? {
+        if let cam = cacheManager {
+            if let cacheObj = cam.getObjectFromCache(forKey) {
+                print("[SCManager:get] -> Objekt aus NSCache geladen")
+                return cacheObj
+            } else {
+                if let cdm = coreDataManger {
+                    print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
+                    return cdm.getObject(forKey)
+                }
+            }
+        } else {
+            if let cdm = coreDataManger {
+                return cdm.getObject(forKey)
+            }
+        }
+        return nil
     }
     
     public func delete(forKey: String, answer: (Bool) -> ()) {

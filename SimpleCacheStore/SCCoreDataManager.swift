@@ -11,6 +11,13 @@ import CoreData
 
 class SCCoreDataManager {
     
+    enum SCCDataManagerErrorType {
+        case None
+        case Duplicate
+        case CoreDataAccessError
+        case GenericError
+    }
+    
     private var managedObjectContext: NSManagedObjectContext?
     private var lockTable: [String: Bool]?
     
@@ -55,7 +62,7 @@ class SCCoreDataManager {
                 }
             }
         } catch {
-            return false;
+            return false
         }
     }
     
@@ -118,6 +125,32 @@ class SCCoreDataManager {
             answer(false, nil)
             fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
         }
+    }
+    
+    func getObject(forKey: String) -> NSObject? {
+        let fetchRequest = NSFetchRequest()
+        
+        let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!)
+        
+        fetchRequest.entity = entityDescription
+        fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
+        
+        
+        do {
+            let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
+            var answerObject:NSObject?
+            if !result.isEmpty {
+                if let coObject = result[0].object {
+                    if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
+                        answerObject = retrievedObject
+                    }
+                }
+            }
+            return answerObject
+        } catch {
+            fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
+        }
+        return nil
     }
     
     func getAllObjects(answer: (Bool, [NSObject]?) -> ()) {
