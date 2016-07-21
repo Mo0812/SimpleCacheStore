@@ -63,6 +63,11 @@ public class SCManager {
                 if let cdm = coreDataManger {
                     cdm.getObject(forKey, answer: {
                         success, data in
+                        //Enable Entry in NSCache
+                        if let cdData = data {
+                            cam.saveObjectToCache(forKey, object: cdData)
+                            print("[SCManager:get] -> Objekt nach nicht auffinden gecacht")
+                        }
                         print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
                         answer(success, data)
                     })
@@ -85,6 +90,11 @@ public class SCManager {
                 return cacheObj
             } else {
                 if let cdm = coreDataManger {
+                    let cdObject = cdm.getObject(forKey)
+                    if let cdData = cdObject {
+                        cam.saveObjectToCache(forKey, object: cdData)
+                        print("[SCManager:get] -> Objekt nach nicht auffinden gecacht")
+                    }
                     print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
                     return cdm.getObject(forKey)
                 }
