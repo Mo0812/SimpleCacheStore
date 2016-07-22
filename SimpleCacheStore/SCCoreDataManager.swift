@@ -44,22 +44,21 @@ class SCCoreDataManager {
         do {
             let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
             if result.count > 0 {
+                self.managedObjectContext?.deleteObject(result[0])
+            }
+            let entity = NSEntityDescription.insertNewObjectForEntityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!) as! CacheObject
+            entity.setValue(forKey, forKey: "identifier")
+            
+            let data = NSKeyedArchiver.archivedDataWithRootObject(object)
+            entity.setValue(data, forKey: "object")
+            
+            entity.setValue(NSDate(), forKey: "created")
+            
+            do {
+                try self.managedObjectContext?.save()
+                return true
+            } catch {
                 return false
-            } else {
-                let entity = NSEntityDescription.insertNewObjectForEntityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!) as! CacheObject
-                entity.setValue(forKey, forKey: "identifier")
-                
-                let data = NSKeyedArchiver.archivedDataWithRootObject(object)
-                entity.setValue(data, forKey: "object")
-                
-                entity.setValue(NSDate(), forKey: "created")
-                
-                do {
-                    try self.managedObjectContext?.save()
-                    return true
-                } catch {
-                    return false
-                }
             }
         } catch {
             return false
@@ -78,22 +77,21 @@ class SCCoreDataManager {
         do {
             let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
             if result.count > 0 {
-                answer(false, "[CacheManager:save] -> Key schon vorhanden")
-            } else {
-                let entity = NSEntityDescription.insertNewObjectForEntityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!) as! CacheObject
-                entity.setValue(forKey, forKey: "identifier")
-                
-                let data = NSKeyedArchiver.archivedDataWithRootObject(object)
-                entity.setValue(data, forKey: "object")
-                
-                entity.setValue(NSDate(), forKey: "created")
-                
-                do {
-                    try self.managedObjectContext?.save()
-                    answer(true, "")
-                } catch {
-                    answer(false, "[CacheManager:save] -> Fehler beim Speichern")
-                }
+                self.managedObjectContext?.deleteObject(result[0])
+            }
+            let entity = NSEntityDescription.insertNewObjectForEntityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!) as! CacheObject
+            entity.setValue(forKey, forKey: "identifier")
+            
+            let data = NSKeyedArchiver.archivedDataWithRootObject(object)
+            entity.setValue(data, forKey: "object")
+            
+            entity.setValue(NSDate(), forKey: "created")
+            
+            do {
+                try self.managedObjectContext?.save()
+                answer(true, "")
+            } catch {
+                answer(false, "[CacheManager:save] -> Fehler beim Speichern")
             }
         } catch {
             answer(false, "")

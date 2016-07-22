@@ -19,10 +19,9 @@ class SCCacheManager {
     func saveObjectToCache(forKey: String, object: NSObject) {
         if let cache = cache {
             if let cachedVersion = cache.objectForKey(forKey) {
-                
-            } else {
-                cache.setObject(object, forKey: forKey)
+                cache.removeObjectForKey(forKey)
             }
+            cache.setObject(object, forKey: forKey)
         }
     }
     
