@@ -14,7 +14,7 @@ class SCCoreDataWalker {
     private var managedObjectContext: NSManagedObjectContext?
     
     init() {
-        let coreDataHandler = CoreDataHandler()
+        let coreDataHandler = CoreDataHandler(identifier: "MK.SimpleCacheStore", ressource: "SimpleCache")
         self.managedObjectContext = coreDataHandler.getMOC()
         
     }

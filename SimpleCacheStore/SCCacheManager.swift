@@ -10,30 +10,44 @@ import Foundation
 
 class SCCacheManager {
     
-    private var cache: NSCache?
+    static let sharedInstance = SCCacheManager(limit: SCGlobalOptions.Options.cacheLimit)
+    private var cache: NSCache
+    private var cacheDictionary: Dictionary<String, NSObject>
     
-    init() {
+    init(limit: Int) {
         cache = NSCache()
+        cache.countLimit = limit
+        cacheDictionary = [String: NSObject]()
     }
     
     func saveObjectToCache(forKey: String, object: NSObject) {
-        if let cache = cache {
-            if let cachedVersion = cache.objectForKey(forKey) {
-                cache.removeObjectForKey(forKey)
-            }
-            cache.setObject(object, forKey: forKey)
+        if let cachedVersion = cache.objectForKey(forKey) {
+            cache.removeObjectForKey(forKey)
+        }
+        cache.setObject(object, forKey: forKey)
+        //Dicitonary Code
+        if let dictionaryVersion = cacheDictionary[forKey] {
+            cacheDictionary.updateValue(object, forKey: forKey)
+        } else {
+            cacheDictionary[forKey] = object
         }
     }
     
     func getObjectFromCache(forKey: String) -> NSObject? {
-        if let cache = cache {
-            if let cachedVersion = cache.objectForKey(forKey) as? NSObject {
-                return cachedVersion
-            } else {
-                return nil
-            }
+        if let cachedVersion = cache.objectForKey(forKey) as? NSObject {
+            return cachedVersion
         } else {
             return nil
+        }
+    }
+    
+    func getCacheDictionary() -> Dictionary<String, NSObject> {
+        return cacheDictionary
+    }
+    
+    func setCache(cache: Dictionary<String, NSObject>) {
+        for (key, value) in cache {
+            self.cache.setObject(value, forKey: key)
         }
     }
     

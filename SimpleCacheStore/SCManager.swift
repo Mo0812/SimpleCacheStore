@@ -18,12 +18,22 @@ public class SCManager {
         self.init(expiringDate: NSDate())
     }
     
+    public convenience init(expiringDate: NSDate, cacheLimit: Int) {
+        SCGlobalOptions.Options.cacheLimit = cacheLimit
+        self.init(expiringDate: expiringDate)
+    }
+    
     public init(expiringDate: NSDate) {
         SCGlobalOptions.Options.expiringDate = expiringDate
+        
         coreDataWalker = SCCoreDataWalker()
-        //coreDataWalker?.cleanCache()
         coreDataManger = SCCoreDataManager()
-        cacheManager = SCCacheManager()
+        
+        let cacheWalker = SCCacheWalker()
+        cacheWalker.restoreSnapshot()
+        cacheManager = SCCacheManager.sharedInstance
+        
+        NSTimer(timeInterval: 2, target: self, selector: "periodicSnapshot", userInfo: nil, repeats: true)
     }
     
     public func save(forKey: String, object: NSObject, answer: (Bool, String) -> ()) {
@@ -131,4 +141,14 @@ public class SCManager {
         }
     }
     
+    public func createSnapshot() {
+        let cacheWalker = SCCacheWalker()
+        cacheWalker.saveSnapshot()
+    }
+    
+    private func periodicSnapshot() {
+        print("PERIODIC SNAPSHOT")
+        let cacheWalker = SCCacheWalker()
+        cacheWalker.saveSnapshot()
+    }
 }

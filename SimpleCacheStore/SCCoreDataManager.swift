@@ -22,7 +22,7 @@ class SCCoreDataManager {
     private var lockTable: [String: Bool]?
     
     init() {
-        let coreDataHandler = CoreDataHandler()
+        let coreDataHandler = CoreDataHandler(identifier: "MK.SimpleCacheStore", ressource: "SimpleCache")
         self.managedObjectContext = coreDataHandler.getMOC()
         
         /****

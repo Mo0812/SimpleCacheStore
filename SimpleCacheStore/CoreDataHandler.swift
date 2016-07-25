@@ -13,8 +13,8 @@ class CoreDataHandler {
     
     private var managedObjectContext: NSManagedObjectContext?
     
-    init() {
-        guard let coreDataUrl = NSBundle(identifier: "MK.SimpleCacheStore")!.URLForResource("SimpleCache", withExtension: "momd") else {
+    init(identifier: String, ressource: String) {
+        guard let coreDataUrl = NSBundle(identifier: identifier)!.URLForResource(ressource, withExtension: "momd") else {
             fatalError("[CacheManager:init] -> Couldnt find URL")
         }
         guard let mom = NSManagedObjectModel(contentsOfURL: coreDataUrl) else {
@@ -29,7 +29,7 @@ class CoreDataHandler {
         /* The directory the application uses to store the Core Data store file.
          This code uses a file named "DataModel.sqlite" in the application's documents directory.
          */
-        let storeURL = docURL.URLByAppendingPathComponent("SimpleCache.sqlite")
+        let storeURL = docURL.URLByAppendingPathComponent(ressource + ".sqlite")
         do {
             try psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
         } catch {

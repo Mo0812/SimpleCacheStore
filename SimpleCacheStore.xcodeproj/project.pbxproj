@@ -16,6 +16,9 @@
 		C59316331D39591600C3424C /* SCCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59316321D39591600C3424C /* SCCoreDataManager.swift */; };
 		C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */; };
 		C593163C1D395AD100C3424C /* CacheObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C593163A1D395AD100C3424C /* CacheObject.swift */; };
+		C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B7611D42E68D0006D932 /* SCCacheWalker.swift */; };
+		C5E3B7651D42E94A0006D932 /* SCSnapshot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B7631D42E94A0006D932 /* SCSnapshot.xcdatamodeld */; };
+		C5E3B7671D42E9EB0006D932 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B7661D42E9EB0006D932 /* Snapshot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		C59316321D39591600C3424C /* SCCoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCoreDataManager.swift; sourceTree = "<group>"; };
 		C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleCache.xcdatamodel; sourceTree = "<group>"; };
 		C593163A1D395AD100C3424C /* CacheObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheObject.swift; path = ../CacheObject.swift; sourceTree = "<group>"; };
+		C5E3B7611D42E68D0006D932 /* SCCacheWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCacheWalker.swift; sourceTree = "<group>"; };
+		C5E3B7641D42E94A0006D932 /* SCSnapshot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SCSnapshot.xcdatamodel; sourceTree = "<group>"; };
+		C5E3B7661D42E9EB0006D932 /* Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Snapshot.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,7 @@
 			children = (
 				C593162C1D3958FA00C3424C /* Info.plist */,
 				C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */,
+				C5E3B7631D42E94A0006D932 /* SCSnapshot.xcdatamodeld */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -66,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				C593163A1D395AD100C3424C /* CacheObject.swift */,
+				C5E3B7661D42E9EB0006D932 /* Snapshot.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -74,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				C56BA4D81D3ED52500263ECE /* SCCacheManager.swift */,
+				C5E3B7611D42E68D0006D932 /* SCCacheWalker.swift */,
 			);
 			name = SCCache;
 			sourceTree = "<group>";
@@ -188,8 +197,11 @@
 			files = (
 				C56BA4CA1D3ECAB900263ECE /* CoreDataHandler.swift in Sources */,
 				C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */,
+				C5E3B7671D42E9EB0006D932 /* Snapshot.swift in Sources */,
+				C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */,
 				C56BA4B81D3EA78200263ECE /* SCCoreDataWalker.swift in Sources */,
 				C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */,
+				C5E3B7651D42E94A0006D932 /* SCSnapshot.xcdatamodeld in Sources */,
 				C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */,
 				C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */,
 				C593163C1D395AD100C3424C /* CacheObject.swift in Sources */,
@@ -357,6 +369,16 @@
 			);
 			currentVersion = C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */;
 			path = SimpleCache.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		C5E3B7631D42E94A0006D932 /* SCSnapshot.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C5E3B7641D42E94A0006D932 /* SCSnapshot.xcdatamodel */,
+			);
+			currentVersion = C5E3B7641D42E94A0006D932 /* SCSnapshot.xcdatamodel */;
+			path = SCSnapshot.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
