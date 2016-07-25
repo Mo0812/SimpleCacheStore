@@ -25,11 +25,13 @@ class SCCacheManager {
             cache.removeObjectForKey(forKey)
         }
         cache.setObject(object, forKey: forKey)
-        //Dicitonary Code
-        if let dictionaryVersion = cacheDictionary[forKey] {
-            cacheDictionary.updateValue(object, forKey: forKey)
-        } else {
-            cacheDictionary[forKey] = object
+        //Snapshot Mode
+        if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.Snapshot {
+            if let dictionaryVersion = cacheDictionary[forKey] {
+                cacheDictionary.updateValue(object, forKey: forKey)
+            } else {
+                cacheDictionary[forKey] = object
+            }
         }
     }
     
@@ -43,17 +45,18 @@ class SCCacheManager {
     
     func deletObjectFromCache(forKey: String) {
         cache.removeObjectForKey(forKey)
-        cacheDictionary[forKey] = nil
+        if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.Snapshot {
+            cacheDictionary[forKey] = nil
+        }
     }
-    
+    3
     func getCacheDictionary() -> Dictionary<String, NSObject> {
         return cacheDictionary
     }
     
     func setCache(cache: Dictionary<String, NSObject>) {
-        for (key, value) in cache {
-            self.cache.setObject(value, forKey: key)
-        }
+        cache.map({key, value in self.saveObjectToCache(key, object: value)})
+        print("SET CACHE FOR REAL")
     }
     
 }

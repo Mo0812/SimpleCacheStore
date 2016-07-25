@@ -11,7 +11,7 @@ import Foundation
 class SCGlobalOptions {
     
     struct Options {
-        static var expiringDate: NSDate = NSDate()
         static var cacheLimit: Int = 0
+        static var cacheMode: SCManager.CacheMode = SCManager.CacheMode.Rebuild
     }
 }

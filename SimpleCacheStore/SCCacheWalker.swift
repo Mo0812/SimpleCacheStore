@@ -66,5 +66,19 @@ class SCCacheWalker {
         } catch {
             fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
         }
+        
+        print("SNAPSHOT RESTORED")
     }
+    
+    func establishCacheFromPersistentObjects(answer: (Bool) -> ()) {
+        let cdm = SCCoreDataManager()
+        cdm.getObjectDump({
+            objectDict in
+            if let persistentObjects = objectDict {
+                self.cm.setCache(persistentObjects)
+                answer(true)
+            }
+        })
+    }
+    
 }

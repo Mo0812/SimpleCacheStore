@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C56BA4B81D3EA78200263ECE /* SCCoreDataWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4B71D3EA78200263ECE /* SCCoreDataWalker.swift */; };
 		C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */; };
 		C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */; };
 		C56BA4CA1D3ECAB900263ECE /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */; };
@@ -22,7 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C56BA4B71D3EA78200263ECE /* SCCoreDataWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCoreDataWalker.swift; sourceTree = "<group>"; };
 		C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGlobalOptions.swift; sourceTree = "<group>"; };
 		C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCManager.swift; sourceTree = "<group>"; };
 		C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHandler.swift; sourceTree = "<group>"; };
@@ -53,7 +51,6 @@
 			isa = PBXGroup;
 			children = (
 				C59316321D39591600C3424C /* SCCoreDataManager.swift */,
-				C56BA4B71D3EA78200263ECE /* SCCoreDataWalker.swift */,
 				C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */,
 			);
 			name = SCCoreData;
@@ -199,7 +196,6 @@
 				C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */,
 				C5E3B7671D42E9EB0006D932 /* Snapshot.swift in Sources */,
 				C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */,
-				C56BA4B81D3EA78200263ECE /* SCCoreDataWalker.swift in Sources */,
 				C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */,
 				C5E3B7651D42E94A0006D932 /* SCSnapshot.xcdatamodeld in Sources */,
 				C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */,

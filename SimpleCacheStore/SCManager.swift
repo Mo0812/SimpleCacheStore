@@ -10,30 +10,41 @@ import Foundation
 
 public class SCManager {
     
-    let coreDataWalker: SCCoreDataWalker?
+    public enum CacheMode {
+        case Rebuild
+        case Snapshot
+    }
+    
     let coreDataManger: SCCoreDataManager?
     let cacheManager: SCCacheManager?
-    
-    public convenience init() {
-        self.init(expiringDate: NSDate())
-    }
-    
-    public convenience init(expiringDate: NSDate, cacheLimit: Int) {
-        SCGlobalOptions.Options.cacheLimit = cacheLimit
-        self.init(expiringDate: expiringDate)
-    }
-    
-    public init(expiringDate: NSDate) {
-        SCGlobalOptions.Options.expiringDate = expiringDate
         
-        coreDataWalker = SCCoreDataWalker()
+    public convenience init() {
+        self.init(cacheMode: .Rebuild)
+    }
+    
+    public convenience init(cacheMode: CacheMode, cacheLimit: Int) {
+        SCGlobalOptions.Options.cacheLimit = cacheLimit
+        self.init(cacheMode: cacheMode)
+    }
+    
+    public init(cacheMode: CacheMode) {
+        SCGlobalOptions.Options.cacheMode = cacheMode
+
         coreDataManger = SCCoreDataManager()
         
         let cacheWalker = SCCacheWalker()
-        cacheWalker.restoreSnapshot()
+        if(SCGlobalOptions.Options.cacheMode == .Snapshot) {
+            cacheWalker.restoreSnapshot()
+        } else {
+            cacheWalker.establishCacheFromPersistentObjects({ success in })
+        }
         cacheManager = SCCacheManager.sharedInstance
-        
-        NSTimer(timeInterval: 2, target: self, selector: "periodicSnapshot", userInfo: nil, repeats: true)
+    }
+    
+    deinit {
+        if SCGlobalOptions.Options.cacheMode == .Snapshot {
+            self.takeSnapshot()
+        }
     }
     
     public func save(forKey: String, object: NSObject, answer: (Bool, String) -> ()) {
@@ -144,13 +155,12 @@ public class SCManager {
         }
     }
     
-    public func createSnapshot() {
+    public func takeSnapshot() {
         let cacheWalker = SCCacheWalker()
         cacheWalker.saveSnapshot()
     }
     
     private func periodicSnapshot() {
-        print("PERIODIC SNAPSHOT")
         let cacheWalker = SCCacheWalker()
         cacheWalker.saveSnapshot()
     }
