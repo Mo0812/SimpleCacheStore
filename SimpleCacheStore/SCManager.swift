@@ -118,6 +118,9 @@ public class SCManager {
     }
     
     public func delete(forKey: String, answer: (Bool) -> ()) {
+        if let cam = cacheManager {
+            cam.deletObjectFromCache(forKey)
+        }
         if let cdm = coreDataManger {
             cdm.deleteObject(forKey)
             answer(true)

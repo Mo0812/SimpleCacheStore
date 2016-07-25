@@ -41,6 +41,11 @@ class SCCacheManager {
         }
     }
     
+    func deletObjectFromCache(forKey: String) {
+        cache.removeObjectForKey(forKey)
+        cacheDictionary[forKey] = nil
+    }
+    
     func getCacheDictionary() -> Dictionary<String, NSObject> {
         return cacheDictionary
     }
