@@ -78,7 +78,7 @@ Contra
 * cache may not filled on first requests (async task)
 
 **snapshot mode**
-The snapshot mode takes snapshots of the actual cache and saves it in a several core data object. Because NSCache doesn't allow to transform into binary data, the snapshot mode have to carry a additional Dictionary. When using the snapshot mode you have to ensure to take your own snapshots via ```swift scmanager.takeSnapshot() ```. On every start up of SCManager, the system trys to retrieve the latest snapshot. This execution is very fast, but doesn't run async. On the other hand you have two advantages: The last retrieved snapshot may restore a more realistic usage of the cache in your application, and the cache is filled right at the beginning.
+The snapshot mode takes snapshots of the actual cache and saves it in a several core data object. Because NSCache doesn't allow to transform into binary data, the snapshot mode have to carry a additional Dictionary. When using the snapshot mode you have to ensure to take your own snapshots via ``` scmanager.takeSnapshot() ```. On every start up of SCManager, the system trys to retrieve the latest snapshot. This execution is very fast, but doesn't run async. On the other hand you have two advantages: The last retrieved snapshot may restore a more realistic usage of the cache in your application, and the cache is filled right at the beginning.
 
 Pro
 * restored cache set shows a more realistic usage
@@ -95,6 +95,43 @@ Overall the question, which cache mode you uses depends on your working scenario
 #### 2. cache limit
 
 Cache limit indicates how much objects SimpleCacheStore's cache should hold in your application. You may test it via XCode to look after the RAM utilization and adjust the size of it. Like in the statement above, more cache space for SimpleCacheStore always stands for minor cache misses and faster object delivery. Also keep in mind, that the cache only aquire the space its needed, so a higher value of cache limit won't block more memory. The cache is implemented via NSCache so the object deletion is given by the NSCache class.
+
+## Prepare Objects to get saved to SimpleCacheStore
+
+If you want to store an object in SimpleCacheStore you have to implement the NSCoding protocol. The following code shows you an example:
+
+```swift
+import Foundation
+import UIKit
+
+class TestObject2: NSObject, NSCoding {
+    
+    var title: String
+    var image: UIImage
+    
+    init(title: String, image: UIImage) {
+        self.title = title
+        self.image = image
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        guard let title = aDecoder.decodeObjectForKey("title") as? String,
+            let image = aDecoder.decodeObjectForKey("image") as? UIImage
+            else {
+                return nil
+        }
+        
+        self.init(title: title, image: image)
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(self.title, forKey: "title")
+        aCoder.encodeObject(self.image, forKey: "image")
+    }
+}
+```
+
+SimpleCacheStore treat every given object as NSObject, you have to typecast an retrieving object in your app back to the object type you have store it. This flaw you have to keep in mind. Clear defined keys can help you to manage this.
 
 
 ##Roadmap
