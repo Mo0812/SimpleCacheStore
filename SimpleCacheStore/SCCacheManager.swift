@@ -49,7 +49,7 @@ class SCCacheManager {
             cacheDictionary[forKey] = nil
         }
     }
-    3
+    
     func getCacheDictionary() -> Dictionary<String, NSObject> {
         return cacheDictionary
     }

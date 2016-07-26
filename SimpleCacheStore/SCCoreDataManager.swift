@@ -100,29 +100,31 @@ class SCCoreDataManager {
     }
     
     func getObject(forKey: String, answer: (Bool, NSObject?) -> ()) {
-        let fetchRequest = NSFetchRequest()
-        
-        let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!)
-        
-        fetchRequest.entity = entityDescription
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
-        
-        
-        do {
-            let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
-            var answerObject:NSObject?
-            if !result.isEmpty {
-                if let coObject = result[0].object {
-                    if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
-                        answerObject = retrievedObject
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
+            let fetchRequest = NSFetchRequest()
+            
+            let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!)
+            
+            fetchRequest.entity = entityDescription
+            fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
+            
+            
+            do {
+                let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
+                var answerObject:NSObject?
+                if !result.isEmpty {
+                    if let coObject = result[0].object {
+                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
+                            answerObject = retrievedObject
+                        }
                     }
                 }
+                answer(true, answerObject)
+            } catch {
+                answer(false, nil)
+                fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
             }
-            answer(true, answerObject)
-        } catch {
-            answer(false, nil)
-            fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
-        }
+        })
     }
     
     func getObject(forKey: String) -> NSObject? {
@@ -176,28 +178,29 @@ class SCCoreDataManager {
     }
     
     func getObjectDump(answer: (Dictionary<String, NSObject>?) -> ()) {
-        let fetchRequest = NSFetchRequest()
-        
-        let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!)
-        
-        fetchRequest.entity = entityDescription
-        
-        do {
-            let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
-            var dict: Dictionary<String, NSObject> = [String: NSObject]()
-            for cacheObject in result {
-                if let coObject = cacheObject.object, id = cacheObject.identifier {
-                    if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
-                        dict[id] = retrievedObject
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
+            let fetchRequest = NSFetchRequest()
+            
+            let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!)
+            
+            fetchRequest.entity = entityDescription
+            
+            do {
+                let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
+                var dict: Dictionary<String, NSObject> = [String: NSObject]()
+                for cacheObject in result {
+                    if let coObject = cacheObject.object, id = cacheObject.identifier {
+                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
+                            dict[id] = retrievedObject
+                        }
                     }
                 }
+                answer(dict)
+            } catch {
+                answer(nil)
+                fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
             }
-            answer(dict)
-        } catch {
-            answer(nil)
-            fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
-        }
-
+        })
     }
     
    func deleteObject(forKey: String) {
