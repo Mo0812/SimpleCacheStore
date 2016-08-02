@@ -21,13 +21,13 @@ class SCCacheManager {
     }
     
     func saveObjectToCache(forKey: String, object: NSObject) {
-        if let cachedVersion = cache.objectForKey(forKey) {
+        if cache.objectForKey(forKey) != nil {
             cache.removeObjectForKey(forKey)
         }
         cache.setObject(object, forKey: forKey)
         //Snapshot Mode
         if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.Snapshot {
-            if let dictionaryVersion = cacheDictionary[forKey] {
+            if cacheDictionary[forKey] != nil {
                 cacheDictionary.updateValue(object, forKey: forKey)
             } else {
                 cacheDictionary[forKey] = object
@@ -48,6 +48,10 @@ class SCCacheManager {
         if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.Snapshot {
             cacheDictionary[forKey] = nil
         }
+    }
+    
+    func clearTotalCache() {
+        cache.removeAllObjects()
     }
     
     func getCacheDictionary() -> Dictionary<String, NSObject> {
