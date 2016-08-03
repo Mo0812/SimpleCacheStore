@@ -2,8 +2,16 @@
 SimpleCacheStore should allow you to save objects persistent in CoreData and recieve them fast via NSCache when you need them. The basic idea is a key-value store in CoreData with a overlaying cache. Once you save an object in SimpleCacheStore it lays persistent in CoreData and will be also available in the cache of your running instance. Also a not cached object will be saved in the cache when you recieve it for the first time.
 
 ##Table of Contents
-[Features](#features)
-[How to implement SimpleCacheStore](#how-to-implement-simplecachestore)
+* [Features](#features)
+* [How to implement SimpleCacheStore](#how-to-implement-simplecachestore)
+* [How to use SimpleCacheStore](#how-to-use-simplecachestore)
+    * [Save and retrieve objecs](#save-and-retrieve-objects)
+    * [SCManager options](#scmanager-options)
+        * [cache mode](#cache-mode)
+        * [cache limit](#cache-limit)
+* [Prepare Objects to get saved to SimpleCacheStore](#prepare-objects-to-get-saved-to-simplecachestore)
+* [Roadmap](#roadmap)
+* [Why should I use SimpleCacheStore?](#why-should-i-use-simplecachestore?)
 
 ## Features
 * key-value store
@@ -33,6 +41,7 @@ let object = scm.get("KeyX")
 With the example above you retrieve your stored objects sequentially. There is also a async method to ~~save~~ and retrieve your objects:
 
 ~~**save objects async**~~
+
 *We decied to leave this opportuinity in private for now because, saving an object and retrieving it in the same time may cause problems. Stay tuned for further changes.*
 
 <!---```swift
