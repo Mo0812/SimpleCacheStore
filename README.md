@@ -26,18 +26,19 @@ scm.save("KeyX", TestObject("Title 1", subtitle: "Subtitle 1"))
 //get an object from SimpleCacheStore
 let object = scm.get("KeyX")
 ```
-With the example above you retrieve your stored objects sequentially. There is also a async method to save and retrieve your objects:
+With the example above you retrieve your stored objects sequentially. There is also a async method to ~~save~~ and retrieve your objects:
 
-**save objects async**
+~~**save objects async**~~
+*We decied to leave this opportuinity in private for now because, saving an object and retrieving it in the same time may cause problems. Stay tuned for further changes.*
 
-```swift
+~~```swift
 let scm = SCManager()
 //save an object async into SimpleCacheStore
 scm?.save(String(i), object: TestObject2(title: "Title" + String(i), image: UIImage(named: "sampleImage")!), answer: {
     success, message in
     //Do work after you know the object has been stored
 })
-```
+```~~
 **retrieve objects async**
 
 ```swift
