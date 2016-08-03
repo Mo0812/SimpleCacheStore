@@ -7,8 +7,8 @@ SimpleCacheStore should allow you to save objects persistent in CoreData and rec
 * [How to use SimpleCacheStore](#how-to-use-simplecachestore)
     * [Save and retrieve objecs](#save-and-retrieve-objects)
     * [SCManager options](#scmanager-options)
-        * [cache mode](#1.-cache-mode)
-        * [cache limit](#2.-cache-limit)
+        * [cache mode](#cache-mode)
+        * [cache limit](#cache-limit)
 * [Prepare Objects to get saved to SimpleCacheStore](#prepare-objects-to-get-saved-to-simplecachestore)
 * [Roadmap](#roadmap)
 * [Why should I use SimpleCacheStore?](#why-should-i-use-simplecachestore)
@@ -75,7 +75,7 @@ When you instance SCManager in your application you can decide between several o
 let scmanager = SCManager(cacheMode: SCManager.CacheMode, limit: Int)
 ```
 
-#### 1. cache mode
+#### cache mode
 
 The cache mode represents how the cache gets initialized on start up of SimpleCacheStore. One of the benefits of SimpleCacheStore is a fast response on requests via a additional cache. So once an object being requested or first get stored SimpleCacheStore also saves it in it's on cache. The next time the same object will be requested SimpleCacheStore retrieve it much faster via the cache and not via CoreData. The additional caching is a simple way to improve the speed of answering requests, but there is also a problem. On every start of SimpleCacheStore the cache is empty. So for the first request of an object you won't get the benefits of additional speed up. To solve this problem we implemented two strategies.
 
@@ -106,7 +106,7 @@ Contra
 
 Overall the question, which cache mode you uses depends on your working scenario! If you have a small amount of objects in core data (~ 10k-100k) which all fit in SimpleCacheStore's own cache, you should use rebuild mode. If your object library grows all over the place (which we don't recommend - SimpleCacheStore isn't designed to be a data grave) you may can't hold all these objects in the cache memory. Because of the better distribution in these scenario, snapshot mode will be your friend. But please keep in mind that a double memory need may become a problem for your memory too. No matter which mode you use, always keep in mind that SimpleCacheMode adjust it's own cache via request and save commands. So apart from the start up moment, SimpleCacheStore will become more and more specific to what you load from it and saves this in it's cache.
 
-#### 2. cache limit
+#### cache limit
 
 Cache limit indicates how much objects SimpleCacheStore's cache should hold in your application. You may test it via XCode to look after the RAM utilization and adjust the size of it. Like in the statement above, more cache space for SimpleCacheStore always stands for minor cache misses and faster object delivery. Also keep in mind, that the cache only aquire the space its needed, so a higher value of cache limit won't block more memory. The cache is implemented via NSCache so the object deletion is given by the NSCache class.
 
