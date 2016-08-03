@@ -1,6 +1,8 @@
 # SimpleCacheStore
 SimpleCacheStore should allow you to save objects persistent in CoreData and recieve them fast via NSCache when you need them. The basic idea is a key-value store in CoreData with a overlaying cache. Once you save an object in SimpleCacheStore it lays persistent in CoreData and will be also available in the cache of your running instance. Also a not cached object will be saved in the cache when you recieve it for the first time.
 
+**For further information look at our [Wiki](https://github.com/Mo0812/SimpleCacheStore/wiki)!**
+
 ##Table of Contents
 * [Features](#features)
 * [How to implement SimpleCacheStore](#how-to-implement-simplecachestore)
