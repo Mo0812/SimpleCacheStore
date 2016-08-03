@@ -31,14 +31,14 @@ With the example above you retrieve your stored objects sequentially. There is a
 ~~**save objects async**~~
 *We decied to leave this opportuinity in private for now because, saving an object and retrieving it in the same time may cause problems. Stay tuned for further changes.*
 
-~~```swift
+<!---```swift
 let scm = SCManager()
 //save an object async into SimpleCacheStore
 scm?.save(String(i), object: TestObject2(title: "Title" + String(i), image: UIImage(named: "sampleImage")!), answer: {
     success, message in
     //Do work after you know the object has been stored
 })
-```~~
+```-->
 **retrieve objects async**
 
 ```swift
@@ -139,6 +139,7 @@ SimpleCacheStore treat every given object as NSObject, you have to typecast an r
 - [ ] Singleton instance for SCManager for project-wide easy use
 - [x] automatic rebuild cache after creating new instance, for faster first time get-operations
 - [x] cache size control and limits
+- [x] load objects asynchronusly
 - [ ] get SimpleCacheStore used to secondary indexes
 
 ## Why should I use SimpleCacheStore?
