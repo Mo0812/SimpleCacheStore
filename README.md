@@ -7,11 +7,11 @@ SimpleCacheStore should allow you to save objects persistent in CoreData and rec
 * [How to use SimpleCacheStore](#how-to-use-simplecachestore)
     * [Save and retrieve objecs](#save-and-retrieve-objects)
     * [SCManager options](#scmanager-options)
-        * [cache mode](#cache-mode)
-        * [cache limit](#cache-limit)
+        * [cache mode](#1.-cache-mode)
+        * [cache limit](#2.-cache-limit)
 * [Prepare Objects to get saved to SimpleCacheStore](#prepare-objects-to-get-saved-to-simplecachestore)
 * [Roadmap](#roadmap)
-* [Why should I use SimpleCacheStore?](#why-should-i-use-simplecachestore?)
+* [Why should I use SimpleCacheStore?](#why-should-i-use-simplecachestore)
 
 ## Features
 * key-value store
