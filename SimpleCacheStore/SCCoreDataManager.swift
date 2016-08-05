@@ -216,7 +216,7 @@ class SCCoreDataManager {
         })
     }
     
-   func deleteObject(forKey: String) {
+   func deleteObject(forKey: String) -> Bool {
         let fetchRequest = NSFetchRequest(entityName: "CacheObject")
         fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
         
@@ -227,17 +227,18 @@ class SCCoreDataManager {
                 self.managedObjectContext?.deleteObject(cacheObject)
             }
         } catch {
-            // Do something in response to error condition
+            return false
         }
         
         do {
             try self.managedObjectContext?.save()
         } catch {
-            // Do something in response to error condition
+            return false
         }
+        return true
     }
     
-  func clearCache() {
+  func clearCache() -> Bool {
         let fetchRequest = NSFetchRequest(entityName: "CacheObject")
         
         do {
@@ -247,13 +248,14 @@ class SCCoreDataManager {
                 self.managedObjectContext?.deleteObject(cacheObject)
             }
         } catch {
-            // Do something in response to error condition
+            return false
         }
         
         do {
             try self.managedObjectContext?.save()
         } catch {
-            // Do something in response to error condition
+            return false
         }
+        return true
     }
 }

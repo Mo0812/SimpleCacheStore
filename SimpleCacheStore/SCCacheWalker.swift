@@ -72,7 +72,17 @@ class SCCacheWalker {
     
     func establishCacheFromPersistentObjects(answer: (Bool) -> ()) {
         let cdm = SCCoreDataManager()
-        dispatch_sync(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
+        /*let operationQueue = NSOperationQueue()
+        operationQueue.addOperationWithBlock({
+            cdm.getObjectDump({
+                objectDict in
+                if let persistentObjects = objectDict {
+                    self.cm.setCache(persistentObjects)
+                    answer(true)
+                }
+            })
+        })*/
+        dispatch_async(SCGlobalOptions.Options.concurrentSCSQueue, {
             cdm.getObjectDump({
                 objectDict in
                 if let persistentObjects = objectDict {
