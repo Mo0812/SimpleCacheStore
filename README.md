@@ -3,6 +3,8 @@ SimpleCacheStore should allow you to save objects persistent in CoreData and rec
 
 **For further information look at our [Wiki](https://github.com/Mo0812/SimpleCacheStore/wiki)!**
 
+**For more details about the development and architecture of SimpleCacheStore take a look at my [blog](http://moritzkanzler.de/wordpress/simplecachestore/)**
+
 ##Table of Contents
 * [Features](#features)
 * [How to implement SimpleCacheStore](#how-to-implement-simplecachestore)
