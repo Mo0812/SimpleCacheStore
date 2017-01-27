@@ -69,7 +69,20 @@ open class SCManager {
     
     open func save(_ forKey: String, object: NSObject) -> Bool {
         if let cdm = coreDataManger {
-            if cdm.saveObject(forKey, object: object) {
+            if cdm.saveObject(forKey: forKey, object: object) {
+                if let cam = self.cacheManager {
+                    cam.saveObjectToCache(forKey, object: object)
+                    print("[SCManager:save] -> Objekt in NSCache gelegt")
+                }
+                return true
+            }
+        }
+        return false
+    }
+    
+    open func save(forKey: String, object: NSObject, label: String) -> Bool {
+        if let cdm = coreDataManger {
+            if cdm.saveObject(forKey: forKey, object: object, label: label) {
                 if let cam = self.cacheManager {
                     cam.saveObjectToCache(forKey, object: object)
                     print("[SCManager:save] -> Objekt in NSCache gelegt")
@@ -154,6 +167,33 @@ open class SCManager {
             if let cdm = coreDataManger {
                 return cdm.getObject(forKey)
             }
+        }
+        return nil
+    }
+    
+    open func get(byLabel: String, answer: @escaping (Bool, [NSObject]?) -> ()) {
+        if let cdm = coreDataManger {
+            /*self.operationQueue.addOperationWithBlock({
+             cdm.getObject(forKey, answer: {
+             success, data in
+             print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
+             answer(success, data)
+             })
+             })*/
+            SCGlobalOptions.Options.concurrentSCSQueue.async(execute: {
+                cdm.getObjects(byLabel: byLabel, answer: {
+                    success, data in
+                    //Enable Entry in NSCache
+                    print("[SCManager:get] -> Objekte nicht in NSCache, deshalb aus CoreData")
+                    answer(success, data)
+                })
+            })
+        }
+    }
+    
+    open func get(byLabel: String) -> [NSObject]? {
+        if let cdm = coreDataManger {
+            return cdm.getObjects(byLabel: byLabel)
         }
         return nil
     }

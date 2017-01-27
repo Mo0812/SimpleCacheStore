@@ -33,7 +33,7 @@ class SCCoreDataManager {
         return pMOC
     }
     
-    func saveObject(_ forKey: String, object:NSObject) -> Bool {
+    func saveObject(forKey: String, object:NSObject, label: String) -> Bool {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
         
         let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
@@ -55,6 +55,8 @@ class SCCoreDataManager {
             
             entity.setValue(Date(), forKey: "created")
             
+            entity.setValue(label, forKey: "label")
+            
             do {
                 try self.managedObjectContext?.save()
                 return true
@@ -64,6 +66,10 @@ class SCCoreDataManager {
         } catch {
             return false
         }
+    }
+    
+    func saveObject(forKey: String, object: NSObject) -> Bool {
+        return self.saveObject(forKey: forKey, object: object, label: SCGlobalOptions.Options.defaultLabel)
     }
     
     func saveObject(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
@@ -156,6 +162,73 @@ class SCCoreDataManager {
             return answerObject
         } catch {
             fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
+        }
+        return nil
+    }
+    
+    func getObjects(byLabel: String, answer: @escaping (Bool, [NSObject]?) ->()) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+        
+        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
+        
+        fetchRequest.entity = entityDescription
+        fetchRequest.predicate = NSPredicate(format: "label == %@", byLabel)
+        
+        
+        do {
+            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
+            var answerObjects = [NSObject]()
+            
+            if !result.isEmpty {
+                for rawObj in result {
+                    if let coObject = rawObj.object {
+                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
+                            answerObjects.append(retrievedObject)
+                        }
+                    }
+                }
+            }
+            
+            answer(true, answerObjects)
+        } catch {
+            fatalError("[CacheManager:getObjects] -> Fehler beim Lesen von Daten")
+        }
+        answer(false, nil)
+    }
+    
+    func getObjects(byLabel: String) -> [NSObject]? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+        
+        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
+        
+        fetchRequest.entity = entityDescription
+        fetchRequest.predicate = NSPredicate(format: "label == %@", byLabel)
+        
+        
+        do {
+            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
+            var answerObjects = [NSObject]()
+            
+            if !result.isEmpty {
+                print("[SCS:result]\n")
+                print(result)
+                print("[SCS:getObjects] -> !DEBUG! -> Es gibt ein Ergebnis der Anfrage")
+                for rawObj in result {
+                    if let coObject = rawObj.object {
+                        print("[SCS:getObjects] -> !DEBUG! -> Objekt erkannt")
+                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
+                            print("[SCS:getObjects] -> !DEBUG! -> Objekt hinzugefügt")
+                            answerObjects.append(retrievedObject)
+                        }
+                    }
+                }
+            } else {
+                print("[SCS:getObjects] -> !DEBUG! -> Kein Ergebnis der Anfrage")
+            }
+            
+            return answerObjects
+        } catch {
+            fatalError("[CacheManager:getObjects] -> Fehler beim Lesen von Daten")
         }
         return nil
     }
