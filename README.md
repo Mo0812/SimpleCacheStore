@@ -140,9 +140,9 @@ class TestObject2: NSObject, NSCoding {
         self.image = image
     }
     
-    required convenience init?(coder aDecoder: NSCoder) {
-        guard let title = aDecoder.decodeObjectForKey("title") as? String,
-            let image = aDecoder.decodeObjectForKey("image") as? UIImage
+    required convenience init?(coder decoder: NSCoder) {
+        guard let title = decoder.decodeObjectForKey("title") as? String,
+            let image = decoder.decodeObjectForKey("image") as? UIImage
             else {
                 return nil
         }
@@ -150,9 +150,9 @@ class TestObject2: NSObject, NSCoding {
         self.init(title: title, image: image)
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(self.title, forKey: "title")
-        aCoder.encodeObject(self.image, forKey: "image")
+    func encode(with coder: NSCoder) {
+        coder.encode(self.title, forKey: "title")
+        coder.encode(self.image, forKey: "image")
     }
 }
 ```
