@@ -11,8 +11,8 @@ import Foundation
 class SCCacheManager {
     
     static let sharedInstance = SCCacheManager(limit: SCGlobalOptions.Options.cacheLimit)
-    private var cache: NSCache
-    private var cacheDictionary: Dictionary<String, NSObject>
+    fileprivate var cache: NSCache<AnyObject, AnyObject>
+    fileprivate var cacheDictionary: Dictionary<String, NSObject>
     
     init(limit: Int) {
         cache = NSCache()
@@ -20,13 +20,13 @@ class SCCacheManager {
         cacheDictionary = [String: NSObject]()
     }
     
-    func saveObjectToCache(forKey: String, object: NSObject) {
-        if cache.objectForKey(forKey) != nil {
-            cache.removeObjectForKey(forKey)
+    func saveObjectToCache(_ forKey: String, object: NSObject) {
+        if cache.object(forKey: forKey as AnyObject) != nil {
+            cache.removeObject(forKey: forKey as AnyObject)
         }
-        cache.setObject(object, forKey: forKey)
+        cache.setObject(object, forKey: forKey as AnyObject)
         //Snapshot Mode
-        if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.Snapshot {
+        if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.snapshot {
             if cacheDictionary[forKey] != nil {
                 cacheDictionary.updateValue(object, forKey: forKey)
             } else {
@@ -35,17 +35,17 @@ class SCCacheManager {
         }
     }
     
-    func getObjectFromCache(forKey: String) -> NSObject? {
-        if let cachedVersion = cache.objectForKey(forKey) as? NSObject {
+    func getObjectFromCache(_ forKey: String) -> NSObject? {
+        if let cachedVersion = cache.object(forKey: forKey as AnyObject) as? NSObject {
             return cachedVersion
         } else {
             return nil
         }
     }
     
-    func deletObjectFromCache(forKey: String) {
-        cache.removeObjectForKey(forKey)
-        if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.Snapshot {
+    func deletObjectFromCache(_ forKey: String) {
+        cache.removeObject(forKey: forKey as AnyObject)
+        if SCGlobalOptions.Options.cacheMode == SCManager.CacheMode.snapshot {
             cacheDictionary[forKey] = nil
         }
     }
@@ -58,7 +58,7 @@ class SCCacheManager {
         return cacheDictionary
     }
     
-    func setCache(cache: Dictionary<String, NSObject>) {
+    func setCache(_ cache: Dictionary<String, NSObject>) {
         cache.map({key, value in self.saveObjectToCache(key, object: value)})
         print("SET CACHE FOR REAL")
     }

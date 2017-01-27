@@ -12,7 +12,7 @@ import CoreData
 
 class Snapshot: NSManagedObject {
     
-    @NSManaged var created: NSDate?
-    @NSManaged var data: NSData?
+    @NSManaged var created: Date?
+    @NSManaged var data: Data?
     
 }

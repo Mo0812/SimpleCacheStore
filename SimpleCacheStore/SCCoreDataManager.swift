@@ -12,13 +12,13 @@ import CoreData
 class SCCoreDataManager {
     
     enum SCCDataManagerErrorType {
-        case None
-        case Duplicate
-        case CoreDataAccessError
-        case GenericError
+        case none
+        case duplicate
+        case coreDataAccessError
+        case genericError
     }
     
-    private var managedObjectContext: NSManagedObjectContext?
+    fileprivate var managedObjectContext: NSManagedObjectContext?
     
     init() {
         let coreDataHandler = CoreDataHandler(identifier: "MK.SimpleCacheStore", ressource: "SimpleCache")
@@ -27,33 +27,33 @@ class SCCoreDataManager {
     }
     
     func initPrivateMOC() -> NSManagedObjectContext {
-        let pMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        pMOC.parentContext = self.managedObjectContext
+        let pMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        pMOC.parent = self.managedObjectContext
         
         return pMOC
     }
     
-    func saveObject(forKey: String, object:NSObject) -> Bool {
-        let fetchRequest = NSFetchRequest()
+    func saveObject(_ forKey: String, object:NSObject) -> Bool {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
         
-        let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!)
+        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
         
         fetchRequest.entity = entityDescription
         fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
         
         
         do {
-            let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
+            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
             if result.count > 0 {
-                self.managedObjectContext?.deleteObject(result[0])
+                self.managedObjectContext?.delete(result[0])
             }
-            let entity = NSEntityDescription.insertNewObjectForEntityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!) as! CacheObject
+            let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: self.managedObjectContext!) as! CacheObject
             entity.setValue(forKey, forKey: "identifier")
             
-            let data = NSKeyedArchiver.archivedDataWithRootObject(object)
+            let data = NSKeyedArchiver.archivedData(withRootObject: object)
             entity.setValue(data, forKey: "object")
             
-            entity.setValue(NSDate(), forKey: "created")
+            entity.setValue(Date(), forKey: "created")
             
             do {
                 try self.managedObjectContext?.save()
@@ -66,30 +66,30 @@ class SCCoreDataManager {
         }
     }
     
-    func saveObject(forKey: String, object: NSObject, answer: (Bool, String) -> ()) {
+    func saveObject(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
         let pMOC = self.initPrivateMOC()
         
-        pMOC.performBlock({
-            let fetchRequest = NSFetchRequest()
+        pMOC.perform({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
-            let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: pMOC)
+            let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: pMOC)
             
             fetchRequest.entity = entityDescription
             fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
             
             
             do {
-                let result = try pMOC.executeFetchRequest(fetchRequest) as! [CacheObject]
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
                 if result.count > 0 {
-                    pMOC.deleteObject(result[0])
+                    pMOC.delete(result[0])
                 }
-                let entity = NSEntityDescription.insertNewObjectForEntityForName("CacheObject", inManagedObjectContext: pMOC) as! CacheObject
+                let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: pMOC) as! CacheObject
                 entity.setValue(forKey, forKey: "identifier")
                 
-                let data = NSKeyedArchiver.archivedDataWithRootObject(object)
+                let data = NSKeyedArchiver.archivedData(withRootObject: object)
                 entity.setValue(data, forKey: "object")
                 
-                entity.setValue(NSDate(), forKey: "created")
+                entity.setValue(Date(), forKey: "created")
                 
                 do {
                     try pMOC.save()
@@ -104,24 +104,24 @@ class SCCoreDataManager {
         
     }
     
-    func getObject(forKey: String, answer: (Bool, NSObject?) -> ()) {
+    func getObject(_ forKey: String, answer: @escaping (Bool, NSObject?) -> ()) {
         let pMOC = self.initPrivateMOC()
         
-        pMOC.performBlock({
-            let fetchRequest = NSFetchRequest()
+        pMOC.perform({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
-            let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: pMOC)
+            let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: pMOC)
             
             fetchRequest.entity = entityDescription
             fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
             
             
             do {
-                let result = try pMOC.executeFetchRequest(fetchRequest) as! [CacheObject]
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
                 var answerObject:NSObject?
                 if !result.isEmpty {
                     if let coObject = result[0].object {
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
+                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                             answerObject = retrievedObject
                         }
                     }
@@ -134,21 +134,21 @@ class SCCoreDataManager {
         })
     }
     
-    func getObject(forKey: String) -> NSObject? {
-        let fetchRequest = NSFetchRequest()
+    func getObject(_ forKey: String) -> NSObject? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
         
-        let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: self.managedObjectContext!)
+        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
         
         fetchRequest.entity = entityDescription
         fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
         
         
         do {
-            let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
+            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
             var answerObject:NSObject?
             if !result.isEmpty {
                 if let coObject = result[0].object {
-                    if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
+                    if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                         answerObject = retrievedObject
                     }
                 }
@@ -160,22 +160,22 @@ class SCCoreDataManager {
         return nil
     }
     
-    func getAllObjects(answer: (Bool, [NSObject]?) -> ()) {
+    func getAllObjects(_ answer: @escaping (Bool, [NSObject]?) -> ()) {
         let pMOC = self.initPrivateMOC()
         
-        pMOC.performBlock({
-            let fetchRequest = NSFetchRequest()
+        pMOC.perform({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
-            let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: pMOC)
+            let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: pMOC)
             
             fetchRequest.entity = entityDescription
             
             do {
-                let result = try pMOC.executeFetchRequest(fetchRequest) as! [CacheObject]
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
                 var answerArr:[NSObject] = [NSObject]()
                 for cacheObject in result {
                     if let coObject = cacheObject.object {
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
+                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                             answerArr.append(retrievedObject)
                         }
                     }
@@ -188,22 +188,22 @@ class SCCoreDataManager {
         })
     }
     
-    func getObjectDump(answer: (Dictionary<String, NSObject>?) -> ()) {
+    func getObjectDump(_ answer: @escaping (Dictionary<String, NSObject>?) -> ()) {
         let pMOC = initPrivateMOC()
         
-        pMOC.performBlock({
-            let fetchRequest = NSFetchRequest()
+        pMOC.perform({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
-            let entityDescription = NSEntityDescription.entityForName("CacheObject", inManagedObjectContext: pMOC)
+            let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: pMOC)
             
             fetchRequest.entity = entityDescription
             
             do {
-                let result = try pMOC.executeFetchRequest(fetchRequest) as! [CacheObject]
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
                 var dict: Dictionary<String, NSObject> = [String: NSObject]()
                 for cacheObject in result {
-                    if let coObject = cacheObject.object, id = cacheObject.identifier {
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObjectWithData(coObject) as? NSObject {
+                    if let coObject = cacheObject.object, let id = cacheObject.identifier {
+                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                             dict[id] = retrievedObject
                         }
                     }
@@ -216,15 +216,15 @@ class SCCoreDataManager {
         })
     }
     
-   func deleteObject(forKey: String) -> Bool {
-        let fetchRequest = NSFetchRequest(entityName: "CacheObject")
+   func deleteObject(_ forKey: String) -> Bool {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
         fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
         
         do {
-            let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
+            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
             
             for cacheObject in result {
-                self.managedObjectContext?.deleteObject(cacheObject)
+                self.managedObjectContext?.delete(cacheObject)
             }
         } catch {
             return false
@@ -239,13 +239,13 @@ class SCCoreDataManager {
     }
     
   func clearCache() -> Bool {
-        let fetchRequest = NSFetchRequest(entityName: "CacheObject")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
         
         do {
-            let result = try self.managedObjectContext?.executeFetchRequest(fetchRequest) as! [CacheObject]
+            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
             
             for cacheObject in result {
-                self.managedObjectContext?.deleteObject(cacheObject)
+                self.managedObjectContext?.delete(cacheObject)
             }
         } catch {
             return false
