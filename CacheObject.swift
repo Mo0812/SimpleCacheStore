@@ -13,7 +13,8 @@ import CoreData
 class CacheObject: NSManagedObject {
 
     @NSManaged var identifier: String?
-    @NSManaged var created: NSDate?
-    @NSManaged var object: NSData?
+    @NSManaged var label: String?
+    @NSManaged var created: Date?
+    @NSManaged var object: Data?
 
 }

@@ -11,27 +11,27 @@ import CoreData
 
 class CoreDataHandler {
     
-    private var managedObjectContext: NSManagedObjectContext?
+    fileprivate var managedObjectContext: NSManagedObjectContext?
     
     init(identifier: String, ressource: String) {
-        guard let coreDataUrl = NSBundle(identifier: identifier)!.URLForResource(ressource, withExtension: "momd") else {
+        guard let coreDataUrl = Bundle(identifier: identifier)!.url(forResource: ressource, withExtension: "momd") else {
             fatalError("[CacheManager:init] -> Couldnt find URL")
         }
-        guard let mom = NSManagedObjectModel(contentsOfURL: coreDataUrl) else {
+        guard let mom = NSManagedObjectModel(contentsOf: coreDataUrl) else {
             fatalError("[CacheManager:init] -> Couldnt load MOM")
         }
         let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        self.managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        self.managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         self.managedObjectContext?.persistentStoreCoordinator = psc
         
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let docURL = urls[urls.endIndex-1]
         /* The directory the application uses to store the Core Data store file.
          This code uses a file named "DataModel.sqlite" in the application's documents directory.
          */
-        let storeURL = docURL.URLByAppendingPathComponent(ressource + ".sqlite")
+        let storeURL = docURL.appendingPathComponent(ressource + ".sqlite")
         do {
-            try psc.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
+            try psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
         } catch {
             fatalError("[CoreDataHandler:init] -> \(error)")
         }
