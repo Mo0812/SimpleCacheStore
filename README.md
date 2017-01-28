@@ -36,32 +36,20 @@ import SimpleCacheStore
 
 After that you can instance the SCManager class and use the following commands:
 ```swift
-let scm = SCManager()
+let scm = SCManager(cacheMode: .rebuild, limit: 1000)
 //save an object into SimpleCacheStore
-scm.save("KeyX", TestObject("Title 1", subtitle: "Subtitle 1"))
+scm.save(forKey: "KeyX", object: TestObject("Title 1", subtitle: "Subtitle 1"))
 //get an object from SimpleCacheStore
-let object = scm.get("KeyX")
+let object = scm.get(forKey: "KeyX")
 ```
 With the example above you retrieve your stored objects sequentially. There is also a async method to ~~save~~ and retrieve your objects:
 
-~~**save objects async**~~
-
-*We decied to leave this opportuinity in private for now because, saving an object and retrieving it in the same time may cause problems. Stay tuned for further changes.*
-
-<!---```swift
-let scm = SCManager()
-//save an object async into SimpleCacheStore
-scm?.save(String(i), object: TestObject2(title: "Title" + String(i), image: UIImage(named: "sampleImage")!), answer: {
-    success, message in
-    //Do work after you know the object has been stored
-})
-```-->
 **retrieve objects async**
 
 ```swift
-let scm = SCManager()
+let scm = SCManager(cacheMode: .rebuild, limit: 1000)
 //retrieve an object async from SimpleCacheStore
-scm?.get(String(i), answer: {
+scm?.get(forKey: String(i), answer: {
       success, data in
       let obj = data as! TestObject2
       //operate with the object
@@ -70,6 +58,38 @@ scm?.get(String(i), answer: {
 ```
 
 SimpleCacheStore operates the request in a seperate thread via GC.
+
+### Save and retrieve multiple objects
+
+To save single objects is the most basic way to hold an object to the phone for further using, but often there is a need to group objects in categories. For example objects which represents a person and label them as *friends* or *employees*.
+
+#### Save object with a additional label
+
+To enable this possibility there is a feature added, where you can assign a *label* to every object you save. Because of this the ```save``` function has an overloaded paramater ***label***:
+
+
+```swift
+let scm = SCManager(cacheMode: .rebuild, limit: 1000)
+//save an object into SimpleCacheStore with a given label
+scm.save(forKey: "KeyX", object: TestObject("Title 1", subtitle: "Subtitle 1"), label: "My Label")
+```
+
+#### Retrieve objects after label
+
+To retrieve an object range for a given label you can use a specialized kind of the ```get``` function:
+
+```swift
+let scm = SCManager(cacheMode: .rebuild, limit: 1000)
+scm?.get(byLabel: "friends", answer: {
+    success, data in
+    for friend in data {
+      if let obj = friend as! TestObject2 {
+        //operate with the object
+        print(obj.title)
+      }
+    }      
+})
+```
 
 ### SCManager options
 
@@ -99,6 +119,8 @@ Contra
 * cache may not filled on first requests (async task)
 
 ---
+
+> **Please note:** This mode is deprecated
 
 **snapshot mode**
 
@@ -131,25 +153,25 @@ import Foundation
 import UIKit
 
 class TestObject2: NSObject, NSCoding {
-    
+
     var title: String
     var image: UIImage
-    
+
     init(title: String, image: UIImage) {
         self.title = title
         self.image = image
     }
-    
+
     required convenience init?(coder decoder: NSCoder) {
         guard let title = decoder.decodeObjectForKey("title") as? String,
             let image = decoder.decodeObjectForKey("image") as? UIImage
             else {
                 return nil
         }
-        
+
         self.init(title: title, image: image)
     }
-    
+
     func encode(with coder: NSCoder) {
         coder.encode(self.title, forKey: "title")
         coder.encode(self.image, forKey: "image")
@@ -165,7 +187,7 @@ SimpleCacheStore treat every given object as NSObject, you have to typecast an r
 - [x] automatic rebuild cache after creating new instance, for faster first time get-operations
 - [x] cache size control and limits
 - [x] load objects asynchronusly
-- [ ] get SimpleCacheStore used to secondary indexes
+- [x] get SimpleCacheStore used to secondary indexes
 
 ## Why should I use SimpleCacheStore?
 The idea of creating SimpleCacheStore is to improve the performance of an self written app (for a university project). This app alwasys fetches informations from a server and has the problem, if no data connection exists the app can't show any content. So my idea was to be able to save downloaded content easily for the case that the data connection gets lost. The second advantage is that slow data connections can also delay the presentation of data in the GUI. So if an app can access (even old) data before the request from the server is answered, it would represent an adavantage too.
