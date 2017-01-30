@@ -10,6 +10,9 @@ SimpleCacheStore should allow you to save objects persistent in CoreData and rec
 * [How to implement SimpleCacheStore](#how-to-implement-simplecachestore)
 * [How to use SimpleCacheStore](#how-to-use-simplecachestore)
     * [Save and retrieve objecs](#save-and-retrieve-objects)
+    * [Save and retrieve multiple objects](save-and-retrieve-multiple-objects)
+        * [Save object with a additional label](save-object-with-a-additional-label)
+        * [Retrieve objects queried by label](retrieve-objects-queried-by-label)
     * [SCManager options](#scmanager-options)
         * [cache mode](#cache-mode)
         * [cache limit](#cache-limit)
@@ -74,7 +77,7 @@ let scm = SCManager(cacheMode: .rebuild, limit: 1000)
 scm.save(forKey: "KeyX", object: TestObject("Title 1", subtitle: "Subtitle 1"), label: "My Label")
 ```
 
-#### Retrieve objects after label
+#### Retrieve objects queried by label
 
 To retrieve an object range for a given label you can use a specialized kind of the ```get``` function:
 
