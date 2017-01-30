@@ -188,6 +188,8 @@ SimpleCacheStore treat every given object as NSObject, you have to typecast an r
 - [x] cache size control and limits
 - [x] load objects asynchronusly
 - [x] get SimpleCacheStore used to secondary indexes
+- [ ] multiple secondary indexes for any object
+- [ ] caching rebuild mode based on most used objects
 
 ## Why should I use SimpleCacheStore?
 The idea of creating SimpleCacheStore is to improve the performance of an self written app (for a university project). This app alwasys fetches informations from a server and has the problem, if no data connection exists the app can't show any content. So my idea was to be able to save downloaded content easily for the case that the data connection gets lost. The second advantage is that slow data connections can also delay the presentation of data in the GUI. So if an app can access (even old) data before the request from the server is answered, it would represent an adavantage too.
