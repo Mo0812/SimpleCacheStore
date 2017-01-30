@@ -24,6 +24,7 @@ SimpleCacheStore should allow you to save objects persistent in CoreData and rec
 * key-value store
 * persistent saving in CoreData
 * additional holding used objects in cache for fast recieving
+* secondary indexes for range queries on objects
 
 ## How to implement SimpleCacheStore
 SimpleCacheStore is still under development, so don't use it in production enviorments at the moment. If you want to test or improve it, you're welcome!
