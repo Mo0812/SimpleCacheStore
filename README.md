@@ -3,13 +3,16 @@ SimpleCacheStore should allow you to save objects persistent in CoreData and rec
 
 **For further information look at our [Wiki](https://github.com/Mo0812/SimpleCacheStore/wiki)!**
 
-**For more details about the development and architecture of SimpleCacheStore take a look at my [blog](http://moritzkanzler.de/wordpress/simplecachestore/)**
+**For more details about the development and architecture of SimpleCacheStore take a look at my [blog](http://moritzkanzler.de/wordpress/simplecachestore/)**.
 
 ##Table of Contents
 * [Features](#features)
 * [How to implement SimpleCacheStore](#how-to-implement-simplecachestore)
 * [How to use SimpleCacheStore](#how-to-use-simplecachestore)
     * [Save and retrieve objecs](#save-and-retrieve-objects)
+    * [Save and retrieve multiple objects](#save-and-retrieve-multiple-objects)
+        * [Save object with a additional label](#save-object-with-a-additional-label)
+        * [Retrieve objects queried by label](#retrieve-objects-queried-by-label)
     * [SCManager options](#scmanager-options)
         * [cache mode](#cache-mode)
         * [cache limit](#cache-limit)
@@ -21,6 +24,7 @@ SimpleCacheStore should allow you to save objects persistent in CoreData and rec
 * key-value store
 * persistent saving in CoreData
 * additional holding used objects in cache for fast recieving
+* secondary indexes for range queries on objects
 
 ## How to implement SimpleCacheStore
 SimpleCacheStore is still under development, so don't use it in production enviorments at the moment. If you want to test or improve it, you're welcome!
@@ -74,7 +78,7 @@ let scm = SCManager(cacheMode: .rebuild, limit: 1000)
 scm.save(forKey: "KeyX", object: TestObject("Title 1", subtitle: "Subtitle 1"), label: "My Label")
 ```
 
-#### Retrieve objects after label
+#### Retrieve objects queried by label
 
 To retrieve an object range for a given label you can use a specialized kind of the ```get``` function:
 
@@ -188,6 +192,8 @@ SimpleCacheStore treat every given object as NSObject, you have to typecast an r
 - [x] cache size control and limits
 - [x] load objects asynchronusly
 - [x] get SimpleCacheStore used to secondary indexes
+- [ ] multiple secondary indexes for any object
+- [ ] caching rebuild mode based on most used objects
 
 ## Why should I use SimpleCacheStore?
 The idea of creating SimpleCacheStore is to improve the performance of an self written app (for a university project). This app alwasys fetches informations from a server and has the problem, if no data connection exists the app can't show any content. So my idea was to be able to save downloaded content easily for the case that the data connection gets lost. The second advantage is that slow data connections can also delay the presentation of data in the GUI. So if an app can access (even old) data before the request from the server is answered, it would represent an adavantage too.
