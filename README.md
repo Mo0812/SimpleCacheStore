@@ -124,24 +124,6 @@ Contra
 
 ---
 
-> **Please note:** This mode is deprecated
-
-**snapshot mode**
-
-The snapshot mode takes snapshots of the actual cache and saves it in a several core data object. Because NSCache doesn't allow to transform into binary data, the snapshot mode have to carry a additional Dictionary. When using the snapshot mode you have to ensure to take your own snapshots via ``` scmanager.takeSnapshot() ```. On every start up of SCManager, the system trys to retrieve the latest snapshot. This execution is very fast, but doesn't run async. On the other hand you have two advantages: The last retrieved snapshot may restore a more realistic usage of the cache in your application, and the cache is filled right at the beginning.
-
-Pro
-* restored cache set shows a more realistic usage
-* cache is ready and filled on startup
-
-Contra
-* depending on your set cache size, this process will slow down the execution of your application
-* you have to implement snapshot taking on your own in the app
-* double amount of RAM needed to carry the information in additional dictionary
-* additional disk space for core data needed
-
----
-
 Overall the question, which cache mode you uses depends on your working scenario! If you have a small amount of objects in core data (~ 10k-100k) which all fit in SimpleCacheStore's own cache, you should use rebuild mode. If your object library grows all over the place (which we don't recommend - SimpleCacheStore isn't designed to be a data grave) you may can't hold all these objects in the cache memory. Because of the better distribution in these scenario, snapshot mode will be your friend. But please keep in mind that a double memory need may become a problem for your memory too. No matter which mode you use, always keep in mind that SimpleCacheMode adjust it's own cache via request and save commands. So apart from the start up moment, SimpleCacheStore will become more and more specific to what you load from it and saves this in it's cache.
 
 #### cache limit
