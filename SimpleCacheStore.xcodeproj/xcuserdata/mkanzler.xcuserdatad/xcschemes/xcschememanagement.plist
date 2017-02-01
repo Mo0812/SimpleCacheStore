@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>SimpleCacheStoreTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>C519282D1E4144C300CE0BD1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>C59316261D3958F900C3424C</key>
 		<dict>
 			<key>primary</key>

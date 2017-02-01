@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C51928311E4144C300CE0BD1 /* SimpleCacheStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */; };
+		C51928331E4144C300CE0BD1 /* SimpleCacheStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59316271D3958FA00C3424C /* SimpleCacheStore.framework */; };
+		C519283A1E4145A900CE0BD1 /* TestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928391E4145A900CE0BD1 /* TestObject.swift */; };
 		C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */; };
 		C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */; };
 		C56BA4CA1D3ECAB900263ECE /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */; };
@@ -16,11 +19,23 @@
 		C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */; };
 		C593163C1D395AD100C3424C /* CacheObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C593163A1D395AD100C3424C /* CacheObject.swift */; };
 		C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B7611D42E68D0006D932 /* SCCacheWalker.swift */; };
-		C5E3B7651D42E94A0006D932 /* SCSnapshot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B7631D42E94A0006D932 /* SCSnapshot.xcdatamodeld */; };
-		C5E3B7671D42E9EB0006D932 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B7661D42E9EB0006D932 /* Snapshot.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C51928341E4144C300CE0BD1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C593161E1D3958F900C3424C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C59316261D3958F900C3424C;
+			remoteInfo = SimpleCacheStore;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		C519282E1E4144C300CE0BD1 /* SimpleCacheStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleCacheStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCacheStoreTests.swift; sourceTree = "<group>"; };
+		C51928321E4144C300CE0BD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C51928391E4145A900CE0BD1 /* TestObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestObject.swift; sourceTree = "<group>"; };
 		C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGlobalOptions.swift; sourceTree = "<group>"; };
 		C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCManager.swift; sourceTree = "<group>"; };
 		C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHandler.swift; sourceTree = "<group>"; };
@@ -32,11 +47,17 @@
 		C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleCache.xcdatamodel; sourceTree = "<group>"; };
 		C593163A1D395AD100C3424C /* CacheObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheObject.swift; path = ../CacheObject.swift; sourceTree = "<group>"; };
 		C5E3B7611D42E68D0006D932 /* SCCacheWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCacheWalker.swift; sourceTree = "<group>"; };
-		C5E3B7641D42E94A0006D932 /* SCSnapshot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SCSnapshot.xcdatamodel; sourceTree = "<group>"; };
-		C5E3B7661D42E9EB0006D932 /* Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Snapshot.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C519282B1E4144C300CE0BD1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C51928331E4144C300CE0BD1 /* SimpleCacheStore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C59316231D3958F900C3424C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -47,6 +68,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C519282F1E4144C300CE0BD1 /* SimpleCacheStoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				C51928391E4145A900CE0BD1 /* TestObject.swift */,
+				C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */,
+				C51928321E4144C300CE0BD1 /* Info.plist */,
+			);
+			path = SimpleCacheStoreTests;
+			sourceTree = "<group>";
+		};
 		C56BA4BB1D3EB68600263ECE /* SCCoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -61,7 +92,6 @@
 			children = (
 				C593162C1D3958FA00C3424C /* Info.plist */,
 				C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */,
-				C5E3B7631D42E94A0006D932 /* SCSnapshot.xcdatamodeld */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -70,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				C593163A1D395AD100C3424C /* CacheObject.swift */,
-				C5E3B7661D42E9EB0006D932 /* Snapshot.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -88,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				C59316291D3958FA00C3424C /* SimpleCacheStore */,
+				C519282F1E4144C300CE0BD1 /* SimpleCacheStoreTests */,
 				C59316281D3958FA00C3424C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				C59316271D3958FA00C3424C /* SimpleCacheStore.framework */,
+				C519282E1E4144C300CE0BD1 /* SimpleCacheStoreTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,6 +159,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		C519282D1E4144C300CE0BD1 /* SimpleCacheStoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C51928381E4144C300CE0BD1 /* Build configuration list for PBXNativeTarget "SimpleCacheStoreTests" */;
+			buildPhases = (
+				C519282A1E4144C300CE0BD1 /* Sources */,
+				C519282B1E4144C300CE0BD1 /* Frameworks */,
+				C519282C1E4144C300CE0BD1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C51928351E4144C300CE0BD1 /* PBXTargetDependency */,
+			);
+			name = SimpleCacheStoreTests;
+			productName = SimpleCacheStoreTests;
+			productReference = C519282E1E4144C300CE0BD1 /* SimpleCacheStoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C59316261D3958F900C3424C /* SimpleCacheStore */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C593162F1D3958FA00C3424C /* Build configuration list for PBXNativeTarget "SimpleCacheStore" */;
@@ -152,11 +201,18 @@
 		C593161E1D3958F900C3424C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Moritz Kanzler";
 				TargetAttributes = {
+					C519282D1E4144C300CE0BD1 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = ELU5666M3R;
+						ProvisioningStyle = Automatic;
+					};
 					C59316261D3958F900C3424C = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = ELU5666M3R;
 						LastSwiftMigration = 0820;
 					};
 				};
@@ -174,11 +230,19 @@
 			projectRoot = "";
 			targets = (
 				C59316261D3958F900C3424C /* SimpleCacheStore */,
+				C519282D1E4144C300CE0BD1 /* SimpleCacheStoreTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C519282C1E4144C300CE0BD1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C59316251D3958F900C3424C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -189,16 +253,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C519282A1E4144C300CE0BD1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C519283A1E4145A900CE0BD1 /* TestObject.swift in Sources */,
+				C51928311E4144C300CE0BD1 /* SimpleCacheStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C59316221D3958F900C3424C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				C56BA4CA1D3ECAB900263ECE /* CoreDataHandler.swift in Sources */,
 				C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */,
-				C5E3B7671D42E9EB0006D932 /* Snapshot.swift in Sources */,
 				C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */,
 				C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */,
-				C5E3B7651D42E94A0006D932 /* SCSnapshot.xcdatamodeld in Sources */,
 				C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */,
 				C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */,
 				C593163C1D395AD100C3424C /* CacheObject.swift in Sources */,
@@ -208,7 +279,49 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C51928351E4144C300CE0BD1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C59316261D3958F900C3424C /* SimpleCacheStore */;
+			targetProxy = C51928341E4144C300CE0BD1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		C51928361E4144C300CE0BD1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEVELOPMENT_TEAM = ELU5666M3R;
+				INFOPLIST_FILE = SimpleCacheStoreTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = MK.SimpleCacheStoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		C51928371E4144C300CE0BD1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEVELOPMENT_TEAM = ELU5666M3R;
+				INFOPLIST_FILE = SimpleCacheStoreTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = MK.SimpleCacheStoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 		C593162D1D3958FA00C3424C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -304,12 +417,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = ELU5666M3R;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SimpleCacheStore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MK.SimpleCacheStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -324,11 +440,13 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = ELU5666M3R;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SimpleCacheStore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MK.SimpleCacheStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -340,6 +458,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C51928381E4144C300CE0BD1 /* Build configuration list for PBXNativeTarget "SimpleCacheStoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C51928361E4144C300CE0BD1 /* Debug */,
+				C51928371E4144C300CE0BD1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		C59316211D3958F900C3424C /* Build configuration list for PBXProject "SimpleCacheStore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -368,16 +494,6 @@
 			);
 			currentVersion = C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */;
 			path = SimpleCache.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-		C5E3B7631D42E94A0006D932 /* SCSnapshot.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				C5E3B7641D42E94A0006D932 /* SCSnapshot.xcdatamodel */,
-			);
-			currentVersion = C5E3B7641D42E94A0006D932 /* SCSnapshot.xcdatamodel */;
-			path = SCSnapshot.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

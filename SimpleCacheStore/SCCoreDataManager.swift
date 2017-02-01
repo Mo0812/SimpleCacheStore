@@ -72,7 +72,7 @@ class SCCoreDataManager {
         return self.saveObject(forKey: forKey, object: object, label: SCGlobalOptions.Options.defaultLabel)
     }
     
-    func saveObject(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
+    /*func saveObject(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
         let pMOC = self.initPrivateMOC()
         
         pMOC.perform({
@@ -108,9 +108,9 @@ class SCCoreDataManager {
             }
         })
         
-    }
+    }*/
     
-    func getObject(_ forKey: String, answer: @escaping (Bool, NSObject?) -> ()) {
+    func getObject(forKey: String, answer: @escaping (Bool, NSObject?) -> ()) {
         let pMOC = self.initPrivateMOC()
         
         pMOC.perform({
@@ -140,7 +140,7 @@ class SCCoreDataManager {
         })
     }
     
-    func getObject(_ forKey: String) -> NSObject? {
+    func getObject(forKey: String) -> NSObject? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
         
         let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
@@ -167,33 +167,36 @@ class SCCoreDataManager {
     }
     
     func getObjects(byLabel: String, answer: @escaping (Bool, [NSObject]?) ->()) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+        let pMOC = self.initPrivateMOC()
         
-        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
-        
-        fetchRequest.entity = entityDescription
-        fetchRequest.predicate = NSPredicate(format: "label == %@", byLabel)
-        
-        
-        do {
-            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
-            var answerObjects = [NSObject]()
+        pMOC.perform({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
-            if !result.isEmpty {
-                for rawObj in result {
-                    if let coObject = rawObj.object {
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
-                            answerObjects.append(retrievedObject)
+            let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: pMOC)
+            
+            fetchRequest.entity = entityDescription
+            fetchRequest.predicate = NSPredicate(format: "label == %@", byLabel)
+            
+            
+            do {
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
+                var answerObjects = [NSObject]()
+
+                if !result.isEmpty {
+                    for rawObj in result {
+                        if let coObject = rawObj.object {
+                            if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
+                                answerObjects.append(retrievedObject)
+                            }
                         }
                     }
                 }
+                answer(true, answerObjects)
+            } catch {
+                answer(false, nil)
+                fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
             }
-            
-            answer(true, answerObjects)
-        } catch {
-            fatalError("[CacheManager:getObjects] -> Fehler beim Lesen von Daten")
-        }
-        answer(false, nil)
+        })
     }
     
     func getObjects(byLabel: String) -> [NSObject]? {
@@ -210,22 +213,17 @@ class SCCoreDataManager {
             var answerObjects = [NSObject]()
             
             if !result.isEmpty {
-                print("[SCS:result]\n")
                 print(result)
-                print("[SCS:getObjects] -> !DEBUG! -> Es gibt ein Ergebnis der Anfrage")
                 for rawObj in result {
                     if let coObject = rawObj.object {
-                        print("[SCS:getObjects] -> !DEBUG! -> Objekt erkannt")
                         if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
-                            print("[SCS:getObjects] -> !DEBUG! -> Objekt hinzugefügt")
                             answerObjects.append(retrievedObject)
                         }
                     }
                 }
             } else {
-                print("[SCS:getObjects] -> !DEBUG! -> Kein Ergebnis der Anfrage")
+                
             }
-            
             return answerObjects
         } catch {
             fatalError("[CacheManager:getObjects] -> Fehler beim Lesen von Daten")
@@ -233,7 +231,7 @@ class SCCoreDataManager {
         return nil
     }
     
-    func getAllObjects(_ answer: @escaping (Bool, [NSObject]?) -> ()) {
+    func getAllObjects(answer: @escaping (Bool, [NSObject]?) -> ()) {
         let pMOC = self.initPrivateMOC()
         
         pMOC.perform({
@@ -261,7 +259,7 @@ class SCCoreDataManager {
         })
     }
     
-    func getObjectDump(_ answer: @escaping (Dictionary<String, NSObject>?) -> ()) {
+    func getObjectDump(answer: @escaping (Dictionary<String, NSObject>?) -> ()) {
         let pMOC = initPrivateMOC()
         
         pMOC.perform({
@@ -289,7 +287,7 @@ class SCCoreDataManager {
         })
     }
     
-   func deleteObject(_ forKey: String) -> Bool {
+   func deleteObject(forKey: String) -> Bool {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
         fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
         

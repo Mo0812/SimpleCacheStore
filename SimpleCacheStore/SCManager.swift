@@ -12,12 +12,10 @@ open class SCManager {
         
     public enum CacheMode {
         case rebuild
-        case snapshot
     }
     
     let coreDataManger: SCCoreDataManager?
     let cacheManager: SCCacheManager?
-    //let operationQueue: NSOperationQueue
         
     public convenience init() {
         self.init(cacheMode: .rebuild)
@@ -34,23 +32,17 @@ open class SCManager {
         coreDataManger = SCCoreDataManager()
         
         let cacheWalker = SCCacheWalker()
-        if(SCGlobalOptions.Options.cacheMode == .snapshot) {
-            cacheWalker.restoreSnapshot()
-        } else {
-            cacheWalker.establishCacheFromPersistentObjects({ success in })
-        }
+        cacheWalker.establishCacheFromPersistentObjects({ success in })
+        
         cacheManager = SCCacheManager.sharedInstance
         
-        //operationQueue = NSOperationQueue()
     }
     
     deinit {
-        if SCGlobalOptions.Options.cacheMode == .snapshot {
-            self.takeSnapshot()
-        }
+        
     }
 
-    fileprivate func save(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
+    /*fileprivate func save(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
         if let cdm = coreDataManger {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(execute: {
                 cdm.saveObject(forKey, object: object, answer: {
@@ -65,9 +57,9 @@ open class SCManager {
                 })
             })
         }
-    }
+    }*/
     
-    open func save(_ forKey: String, object: NSObject) -> Bool {
+    open func save(forKey: String, object: NSObject) -> Bool {
         if let cdm = coreDataManger {
             if cdm.saveObject(forKey: forKey, object: object) {
                 if let cam = self.cacheManager {
@@ -93,27 +85,15 @@ open class SCManager {
         return false
     }
     
-    open func get(_ forKey: String, answer: @escaping (Bool, NSObject?) -> ()) {
+    open func get(forKey: String, answer: @escaping (Bool, NSObject?) -> ()) {
         if let cam = cacheManager {
             if let cachedObj = cam.getObjectFromCache(forKey) {
                 print("[SCManager:get] -> Objekt aus NSCache geladen")
                 answer(true, cachedObj)
             } else {
                 if let cdm = coreDataManger {
-                    /*self.operationQueue.addOperationWithBlock({
-                        cdm.getObject(forKey, answer: {
-                            success, data in
-                            //Enable Entry in NSCache
-                            if let cdData = data {
-                                cam.saveObjectToCache(forKey, object: cdData)
-                                print("[SCManager:get] -> Objekt nach nicht auffinden gecacht")
-                            }
-                            print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
-                            answer(success, data)
-                        })
-                    })*/
                     SCGlobalOptions.Options.concurrentSCSQueue.async(execute: {
-                        cdm.getObject(forKey, answer: {
+                        cdm.getObject(forKey: forKey, answer: {
                             success, data in
                             //Enable Entry in NSCache
                             if let cdData = data {
@@ -128,15 +108,8 @@ open class SCManager {
             }
         } else {
             if let cdm = coreDataManger {
-                /*self.operationQueue.addOperationWithBlock({
-                    cdm.getObject(forKey, answer: {
-                        success, data in
-                        print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
-                        answer(success, data)
-                    })
-                })*/
                 SCGlobalOptions.Options.concurrentSCSQueue.async(execute: {
-                    cdm.getObject(forKey, answer: {
+                    cdm.getObject(forKey: forKey, answer: {
                         success, data in
                         //Enable Entry in NSCache
                         print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
@@ -147,25 +120,25 @@ open class SCManager {
         }
     }
     
-    open func get(_ forKey: String) -> NSObject? {
+    open func get(forKey: String) -> NSObject? {
         if let cam = cacheManager {
             if let cacheObj = cam.getObjectFromCache(forKey) {
                 print("[SCManager:get] -> Objekt aus NSCache geladen")
                 return cacheObj
             } else {
                 if let cdm = coreDataManger {
-                    let cdObject = cdm.getObject(forKey)
+                    let cdObject = cdm.getObject(forKey: forKey)
                     if let cdData = cdObject {
                         cam.saveObjectToCache(forKey, object: cdData)
                         print("[SCManager:get] -> Objekt nach nicht auffinden gecacht")
                     }
                     print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
-                    return cdm.getObject(forKey)
+                    return cdm.getObject(forKey: forKey)
                 }
             }
         } else {
             if let cdm = coreDataManger {
-                return cdm.getObject(forKey)
+                return cdm.getObject(forKey: forKey)
             }
         }
         return nil
@@ -173,18 +146,10 @@ open class SCManager {
     
     open func get(byLabel: String, answer: @escaping (Bool, [NSObject]?) -> ()) {
         if let cdm = coreDataManger {
-            /*self.operationQueue.addOperationWithBlock({
-             cdm.getObject(forKey, answer: {
-             success, data in
-             print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
-             answer(success, data)
-             })
-             })*/
             SCGlobalOptions.Options.concurrentSCSQueue.async(execute: {
                 cdm.getObjects(byLabel: byLabel, answer: {
                     success, data in
                     //Enable Entry in NSCache
-                    print("[SCManager:get] -> Objekte nicht in NSCache, deshalb aus CoreData")
                     answer(success, data)
                 })
             })
@@ -198,10 +163,10 @@ open class SCManager {
         return nil
     }
     
-    open func delete(_ forKey: String) -> Bool {
+    open func delete(forKey: String) -> Bool {
         var answer = false
         if let cdm = coreDataManger {
-            if cdm.deleteObject(forKey) {
+            if cdm.deleteObject(forKey: forKey) {
                 answer = true
             }
         }
@@ -223,10 +188,10 @@ open class SCManager {
         return false
     }
     
-    open func getAll(_ answer: @escaping (Bool, [NSObject]?) -> ()) {
+    open func getAll(answer: @escaping (Bool, [NSObject]?) -> ()) {
         if let cdm = coreDataManger {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(execute: {
-                cdm.getAllObjects({
+                cdm.getAllObjects(answer: {
                     success, data in
                     print("[SCManager:getAll] -> Objekte aus CoreData")
                     answer(success, data)
@@ -235,13 +200,4 @@ open class SCManager {
         }
     }
     
-    open func takeSnapshot() {
-        let cacheWalker = SCCacheWalker()
-        cacheWalker.saveSnapshot()
-    }
-    
-    fileprivate func periodicSnapshot() {
-        let cacheWalker = SCCacheWalker()
-        cacheWalker.saveSnapshot()
-    }
 }
