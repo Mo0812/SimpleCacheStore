@@ -12,12 +12,10 @@ import CoreData
 class SCCacheWalker {
     
     let cm: SCCacheManager
-    let  moc: NSManagedObjectContext?
     
     init() {
         cm = SCCacheManager.sharedInstance
-        let cdh = CoreDataHandler(identifier: "MK.SimpleCacheStore", ressource: "SCSnapshot")
-        moc = cdh.getMOC()
+        
     }
     
     func establishCacheFromPersistentObjects(_ answer: @escaping (Bool) -> ()) {
