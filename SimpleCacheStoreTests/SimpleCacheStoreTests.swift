@@ -140,6 +140,20 @@ class SimpleCacheStoreTests: XCTestCase {
         }
     }
     
+    func testOverwrite() {
+        
+        let objPure = TestObject(name: "overwriteObj", status: "Before overwriting")
+        scm.save(forKey: "overwriteObj", object: objPure, label: "overwrite")
+        let obj = scm.get(forKey: "overwriteObj") as! TestObject
+        XCTAssertTrue(obj.status == objPure.status , "No match")
+        
+        let objEdit = TestObject(name: "overwriteObj", status: "After overwriting")
+        scm.save(forKey: "overwriteObj", object: objEdit, label: "overwrite")
+        let objEdited = scm.get(forKey: "overwriteObj") as! TestObject
+        XCTAssertTrue(objEdited.status == objEdit.status , "No match")
+        
+    }
+    
     /*func testPerformanceExample() {
         // This is an example of a performance test case.
         let objMeasure = TestObject(name: "Other Object Measure", status: "Nicht was du suchst")

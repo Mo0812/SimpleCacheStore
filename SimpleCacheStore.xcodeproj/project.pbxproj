@@ -465,6 +465,7 @@
 				C51928371E4144C300CE0BD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C59316211D3958F900C3424C /* Build configuration list for PBXProject "SimpleCacheStore" */ = {
 			isa = XCConfigurationList;

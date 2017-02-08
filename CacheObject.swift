@@ -15,6 +15,8 @@ class CacheObject: NSManagedObject {
     @NSManaged var identifier: String?
     @NSManaged var label: String?
     @NSManaged var created: Date?
+    @NSManaged var lastUpdate: Date?
+    @NSManaged var requested: Int64
     @NSManaged var object: Data?
 
 }

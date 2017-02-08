@@ -39,23 +39,38 @@ class SCCoreDataManager {
         let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
         
         fetchRequest.entity = entityDescription
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
-        
+        fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)      
         
         do {
+            
+            var created = Date()
+            var lastUpdate = Date()
+            var requested: UInt64 = 0
+            
             let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
             if result.count > 0 {
+                created = result[0].created!
+                lastUpdate = Date()
+                requested = UInt64(result[0].requested)
+                
                 self.managedObjectContext?.delete(result[0])
+                
             }
+            
             let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: self.managedObjectContext!) as! CacheObject
+            
             entity.setValue(forKey, forKey: "identifier")
             
             let data = NSKeyedArchiver.archivedData(withRootObject: object)
             entity.setValue(data, forKey: "object")
             
-            entity.setValue(Date(), forKey: "created")
+            entity.setValue(created, forKey: "created")
             
             entity.setValue(label, forKey: "label")
+            
+            entity.setValue(lastUpdate, forKey: "lastUpdate")
+            
+            entity.setValue(requested, forKey: "requested")
             
             do {
                 try self.managedObjectContext?.save()
