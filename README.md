@@ -109,6 +109,8 @@ The cache mode represents how the cache gets initialized on start up of SimpleCa
 
 ---
 
+> Cache modes get further development right now
+
 **rebuild mode**
 
 In the rebuild mode SimpleCacheStore reads the whole core data object library and puts every object in the cache. This task will start on the initalizing of SCManager and runs asynchronus, so it won't affect your application on running. The cache gets filled bit by bit. Even own cache fills via get or save commands doesn't get in conflict with this process.
@@ -124,7 +126,7 @@ Contra
 
 ---
 
-Overall the question, which cache mode you uses depends on your working scenario! If you have a small amount of objects in core data (~ 10k-100k) which all fit in SimpleCacheStore's own cache, you should use rebuild mode. If your object library grows all over the place (which we don't recommend - SimpleCacheStore isn't designed to be a data grave) you may can't hold all these objects in the cache memory. Because of the better distribution in these scenario, snapshot mode will be your friend. But please keep in mind that a double memory need may become a problem for your memory too. No matter which mode you use, always keep in mind that SimpleCacheMode adjust it's own cache via request and save commands. So apart from the start up moment, SimpleCacheStore will become more and more specific to what you load from it and saves this in it's cache.
+~~Overall the question, which cache mode you uses depends on your working scenario! If you have a small amount of objects in core data (~ 10k-100k) which all fit in SimpleCacheStore's own cache, you should use rebuild mode. If your object library grows all over the place (which we don't recommend - SimpleCacheStore isn't designed to be a data grave) you may can't hold all these objects in the cache memory. Because of the better distribution in these scenario, snapshot mode will be your friend. But please keep in mind that a double memory need may become a problem for your memory too. No matter which mode you use, always keep in mind that SimpleCacheMode adjust it's own cache via request and save commands. So apart from the start up moment, SimpleCacheStore will become more and more specific to what you load from it and saves this in it's cache.~~
 
 #### cache limit
 
