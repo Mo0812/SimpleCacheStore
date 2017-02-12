@@ -20,7 +20,7 @@ class SCCacheWalker {
     
     func establishCacheFromPersistentObjects(_ answer: @escaping (Bool) -> ()) {
         let cdm = SCCoreDataManager()
-        SCGlobalOptions.Options.concurrentSCSQueue.async(execute: {
+        /*SCGlobalOptions.Options.concurrentSCSQueue.async(execute: {
             cdm.getObjectDump(answer: {
                 objectDict in
                 if let persistentObjects = objectDict {
@@ -28,7 +28,7 @@ class SCCacheWalker {
                     answer(true)
                 }
             })
-        })
+        })*/answer(true)
     }
     
 }
