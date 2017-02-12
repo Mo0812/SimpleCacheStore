@@ -45,7 +45,7 @@ class SimpleCacheStoreTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-        scm.clear()
+        //scm.clear()
         objContainer.removeAll()
         otherContainer.removeAll()
     }
@@ -85,18 +85,20 @@ class SimpleCacheStoreTests: XCTestCase {
         
         scm.get(byLabel: "testobj", answer: {
             success, objects in
-            let swapObjArr = objects as! [TestObject]
-            XCTAssertTrue(swapObjArr.count == self.objContainer.count, "No match")
+            var swapObjArr = objects as! [TestObject]
+            swapObjArr = swapObjArr.sorted(by: { $0.name! < $1.name! })
+            let checkAgainArr = self.objContainer.sorted(by: {$0.name! < $1.name! })
+            XCTAssertTrue(swapObjArr.count == checkAgainArr.count, "No match")
             var i = 0
             for swapObj in swapObjArr {
-                XCTAssertTrue(swapObj.name == self.objContainer[i].name, "No match")
+                XCTAssertTrue(swapObj.name == checkAgainArr[i].name, "No match at " + String(i))
                 i+=1
             }
             XCTAssertEqual(swapObjArr.count, self.objCounter / 2)
             expec.fulfill()
         })
         
-        self.waitForExpectations(timeout: 5) { error in
+        self.waitForExpectations(timeout: 20) { error in
             XCTAssertNil(error, "Something went horribly wrong")
             
         }

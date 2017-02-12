@@ -48,11 +48,13 @@ open class SCManager {
     
     open func save(forKey: String, object: NSObject, label: String) {
         if let cdm = coreDataManger {
-            cdm.saveObject(forKey: forKey, object: object, label: label)
-            if let cam = self.cacheManager {
-                cam.saveObjectToCache(forKey, object: object)
-                print("[SCManager:save] -> Objekt in NSCache gelegt")
-            }
+            SCGlobalOptions.Options.concurrentSCSQueue.sync(execute: {
+                cdm.saveObject(forKey: forKey, object: object, label: label)
+                if let cam = self.cacheManager {
+                    cam.saveObjectToCache(forKey, object: object)
+                    print("[SCManager:save] -> Objekt in NSCache gelegt")
+                }
+            })
         }
     }
     
