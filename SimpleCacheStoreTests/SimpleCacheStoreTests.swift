@@ -14,7 +14,7 @@ class SimpleCacheStoreTests: XCTestCase {
     let scm = SCManager(cacheMode: .rebuild, cacheLimit: 100)
     var objContainer: [TestObject]!
     var otherContainer: [TestObject]!
-    var objCounter = 1000
+    var objCounter = 50
     
     override func setUp() {
         super.setUp()
@@ -118,14 +118,27 @@ class SimpleCacheStoreTests: XCTestCase {
 //                
 //    }
     
-    /*func testPerformanceExample() {
+    func testPerformanceExample() {
         // This is an example of a performance test case.
-        let objMeasure = TestObject(name: "Other Object Measure", status: "Nicht was du suchst")
 
         self.measure {
             // Put the code you want to measure the time of here.
-            _ = self.scm.get(byLabel: "testobj")
+            let expec = self.expectation(description: "Get All Objects for label")
+
+            self.scm.get(byLabel: "testobj", answer: {
+                success, objects in
+                let swapObjArr = objects as! [TestObject]
+                
+                XCTAssertEqual(swapObjArr.count, self.objCounter / 2)
+                expec.fulfill()
+            })
+
+            self.waitForExpectations(timeout: 10) { error in
+                XCTAssertNil(error, "Something went horribly wrong")
+                
+            }
+            
         }
-    }*/
+    }
     
 }

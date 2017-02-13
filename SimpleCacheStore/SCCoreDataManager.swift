@@ -82,9 +82,18 @@ class SCCoreDataManager {
                 
                 do {
                     try pMOC.save()
+                    self.managedObjectContext?.performAndWait({
+                        do {
+                            try self.managedObjectContext?.save()
+                        } catch {
+                            fatalError("MOC save failed")
+                        }
+                    })
                 } catch {
+                    fatalError("pMOC save failed")
                 }
             } catch {
+                fatalError("pMOC save failed")
             }
         })
         
@@ -140,6 +149,7 @@ class SCCoreDataManager {
                 if !result.isEmpty {
                     for rawObj in result {
                         if let coObject = rawObj.object {
+                            self.updateRequestRefCounter(forKey: rawObj.identifier!)
                             if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                                 answerObjects.append(retrievedObject)
                             }
@@ -174,6 +184,13 @@ class SCCoreDataManager {
                 
                 do {
                     try pMOC.save()
+                    self.managedObjectContext?.performAndWait({
+                        do {
+                            try self.managedObjectContext?.save()
+                        } catch {
+                            fatalError("MOC save failed")
+                        }
+                    })
                 } catch {
                     fatalError("[CacheManager:updateRequestRefCounter] -> Fehler beim Aktualisieren des RefCounters")
                 }
