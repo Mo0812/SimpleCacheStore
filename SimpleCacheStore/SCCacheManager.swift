@@ -12,12 +12,10 @@ class SCCacheManager {
     
     static let sharedInstance = SCCacheManager(limit: SCGlobalOptions.Options.cacheLimit)
     fileprivate var cache: NSCache<AnyObject, AnyObject>
-    fileprivate var cacheDictionary: Dictionary<String, NSObject>
     
     init(limit: Int) {
         cache = NSCache()
         cache.countLimit = limit
-        cacheDictionary = [String: NSObject]()
     }
     
     func saveObjectToCache(_ forKey: String, object: NSObject) {

@@ -10,6 +10,7 @@
 		C51928311E4144C300CE0BD1 /* SimpleCacheStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */; };
 		C51928331E4144C300CE0BD1 /* SimpleCacheStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59316271D3958FA00C3424C /* SimpleCacheStore.framework */; };
 		C519283A1E4145A900CE0BD1 /* TestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928391E4145A900CE0BD1 /* TestObject.swift */; };
+		C565ABD11E56616C00225A76 /* SCLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565ABD01E56616C00225A76 /* SCLog.swift */; };
 		C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */; };
 		C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */; };
 		C56BA4CA1D3ECAB900263ECE /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */; };
@@ -36,6 +37,7 @@
 		C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCacheStoreTests.swift; sourceTree = "<group>"; };
 		C51928321E4144C300CE0BD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C51928391E4145A900CE0BD1 /* TestObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestObject.swift; sourceTree = "<group>"; };
+		C565ABD01E56616C00225A76 /* SCLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLog.swift; sourceTree = "<group>"; };
 		C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGlobalOptions.swift; sourceTree = "<group>"; };
 		C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCManager.swift; sourceTree = "<group>"; };
 		C56BA4C91D3ECAB900263ECE /* CoreDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHandler.swift; sourceTree = "<group>"; };
@@ -76,6 +78,14 @@
 				C51928321E4144C300CE0BD1 /* Info.plist */,
 			);
 			path = SimpleCacheStoreTests;
+			sourceTree = "<group>";
+		};
+		C565ABD21E56617B00225A76 /* SCLog */ = {
+			isa = PBXGroup;
+			children = (
+				C565ABD01E56616C00225A76 /* SCLog.swift */,
+			);
+			name = SCLog;
 			sourceTree = "<group>";
 		};
 		C56BA4BB1D3EB68600263ECE /* SCCoreData */ = {
@@ -139,6 +149,7 @@
 				C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */,
 				C56BA4D71D3ED51100263ECE /* SCCache */,
 				C56BA4BB1D3EB68600263ECE /* SCCoreData */,
+				C565ABD21E56617B00225A76 /* SCLog */,
 				C56BA4BD1D3EB6B000263ECE /* Models */,
 				C56BA4BC1D3EB69D00263ECE /* Supporting Files */,
 			);
@@ -271,6 +282,7 @@
 				C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */,
 				C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */,
 				C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */,
+				C565ABD11E56616C00225A76 /* SCLog.swift in Sources */,
 				C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */,
 				C593163C1D395AD100C3424C /* CacheObject.swift in Sources */,
 				C59316331D39591600C3424C /* SCCoreDataManager.swift in Sources */,

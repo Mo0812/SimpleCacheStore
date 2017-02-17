@@ -11,10 +11,10 @@ import XCTest
 
 class SimpleCacheStoreTests: XCTestCase {
     
-    let scm = SCManager(cacheMode: .rebuild, cacheLimit: 100)
+    let scm = SCManager(cacheMode: .rebuild, cacheLimit: 100, debugInfo: true)
     var objContainer: [TestObject]!
     var otherContainer: [TestObject]!
-    var objCounter = 1000
+    var objCounter = 100
     
     override func setUp() {
         super.setUp()
@@ -45,27 +45,8 @@ class SimpleCacheStoreTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-        scm.clear()
         objContainer.removeAll()
         otherContainer.removeAll()
-    }
-    
-    func testSyncGet() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-
-        let objIndex1 = Int(arc4random_uniform(UInt32(objContainer.count)))
-        let objIndex2 = Int(arc4random_uniform(UInt32(otherContainer.count)))
-        
-        let key1 = "testobj" + String(objIndex1)
-        let key2 = "testobj" + String(objIndex2)
-        
-        let swapObj1 = scm.get(forKey: key1) as! TestObject
-        let swapObj2 = scm.get(forKey: key2) as! TestObject
-        
-        XCTAssertTrue(swapObj1.name == objContainer[objIndex1].name , "No match")
-        XCTAssertTrue(swapObj2.name == objContainer[objIndex2].name, "No Match")
-        
     }
     
     func testAsyncGet() {
@@ -97,71 +78,109 @@ class SimpleCacheStoreTests: XCTestCase {
         })
     }
     
-    func testSyncGetLabel() {
-        let swapObjArr = scm.get(byLabel: "testobj") as! [TestObject]
-        XCTAssertTrue(swapObjArr.count == objContainer.count, "No match")
-        var i = 0
-        for swapObj in swapObjArr {
-            XCTAssertTrue(swapObj.name == objContainer[i].name, "No match")
-            i+=1
-        }
-    }
-    
-    func testSyncGetLabel2() {
-        let swapObjArr = scm.get(byLabel: "other") as! [TestObject]
-        XCTAssertTrue(swapObjArr.count == objContainer.count, "No match")
-        var i = 0
-        for swapObj in swapObjArr {
-            XCTAssertTrue(swapObj.name == otherContainer[i].name, "No match")
-            i+=1
-        }
-    }
-    
     func testAsyncGetLabel() {
         
         let expec = expectation(description: "Get All Objects for label")
         
         scm.get(byLabel: "testobj", answer: {
             success, objects in
-            let swapObjArr = objects as! [TestObject]
-            XCTAssertTrue(swapObjArr.count == self.objContainer.count, "No match")
+            var swapObjArr = objects as! [TestObject]
+            swapObjArr = swapObjArr.sorted(by: { $0.name! < $1.name! })
+            let checkAgainArr = self.objContainer.sorted(by: {$0.name! < $1.name! })
+            XCTAssertTrue(swapObjArr.count == checkAgainArr.count, "No match")
             var i = 0
             for swapObj in swapObjArr {
-                XCTAssertTrue(swapObj.name == self.objContainer[i].name, "No match")
+                XCTAssertTrue(swapObj.name == checkAgainArr[i].name, "No match at " + String(i))
                 i+=1
             }
             XCTAssertEqual(swapObjArr.count, self.objCounter / 2)
             expec.fulfill()
         })
         
-        self.waitForExpectations(timeout: 5) { error in
+        self.waitForExpectations(timeout: 20) { error in
             XCTAssertNil(error, "Something went horribly wrong")
             
         }
     }
     
-    func testOverwrite() {
+    func testRemoveObject() {
+        let expec = expectation(description: "object 3 removed")
         
-        let objPure = TestObject(name: "overwriteObj", status: "Before overwriting")
-        scm.save(forKey: "overwriteObj", object: objPure, label: "overwrite")
-        let obj = scm.get(forKey: "overwriteObj") as! TestObject
-        XCTAssertTrue(obj.status == objPure.status , "No match")
+        scm.delete(forKey: "testobj3", answer: {
+            success in
+            XCTAssertTrue(success == true, "No match")
+            
+            self.scm.get(forKey: "testobj3", answer: {
+                success, obj in
+                XCTAssertTrue(success == false, "No match")
+            })
+            
+            expec.fulfill()
+        })
         
-        let objEdit = TestObject(name: "overwriteObj", status: "After overwriting")
-        scm.save(forKey: "overwriteObj", object: objEdit, label: "overwrite")
-        let objEdited = scm.get(forKey: "overwriteObj") as! TestObject
-        XCTAssertTrue(objEdited.status == objEdit.status , "No match")
+        self.waitForExpectations(timeout: 10, handler: {
+            error in
+            XCTAssertNil(error, "Something went horribly wrong")
+        })
+    }
+    
+    func testClear() {
+        let expec = expectation(description: "Remove all objects")
+        
+        scm.clear(cleared: {
+            success in
+            XCTAssertTrue(success == true, "No match")
+            
+            self.scm.get(forKey: "testobj4", answer: {
+                success, obj in
+                XCTAssertTrue(success == false, "No match")
+            })
+            
+            expec.fulfill()
+        })
+        
+        self.waitForExpectations(timeout: 10, handler: {
+            error in
+            XCTAssertNil(error, "Something went horribly wrong")
+        })
         
     }
     
-    /*func testPerformanceExample() {
+//    func testOverwrite() {
+//        
+//        let objPure = TestObject(name: "overwriteObj", status: "Before overwriting")
+//        scm.save(forKey: "overwriteObj", object: objPure, label: "overwrite")
+//        let obj = scm.get(forKey: "overwriteObj") as! TestObject
+//        XCTAssertTrue(obj.status == objPure.status , "No match")
+//        
+//        let objEdit = TestObject(name: "overwriteObj", status: "After overwriting")
+//        scm.save(forKey: "overwriteObj", object: objEdit, label: "overwrite")
+//        let objEdited = scm.get(forKey: "overwriteObj") as! TestObject
+//        XCTAssertTrue(objEdited.status == objEdit.status , "No match")
+//                
+//    }
+    
+    func testPerformanceExample() {
         // This is an example of a performance test case.
-        let objMeasure = TestObject(name: "Other Object Measure", status: "Nicht was du suchst")
 
         self.measure {
             // Put the code you want to measure the time of here.
-            _ = self.scm.get(byLabel: "testobj")
+            let expec = self.expectation(description: "Get All Objects for label")
+
+            self.scm.get(byLabel: "testobj", answer: {
+                success, objects in
+                let swapObjArr = objects as! [TestObject]
+                
+                XCTAssertEqual(swapObjArr.count, self.objCounter / 2)
+                expec.fulfill()
+            })
+
+            self.waitForExpectations(timeout: 10) { error in
+                XCTAssertNil(error, "Something went horribly wrong")
+                
+            }
+            
         }
-    }*/
+    }
     
 }

@@ -33,64 +33,10 @@ class SCCoreDataManager {
         return pMOC
     }
     
-    func saveObject(forKey: String, object:NSObject, label: String) -> Bool {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
-        
-        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
-        
-        fetchRequest.entity = entityDescription
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)      
-        
-        do {
-            
-            var created = Date()
-            var lastUpdate = Date()
-            var requested: UInt64 = 0
-            
-            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
-            if result.count > 0 {
-                created = result[0].created!
-                lastUpdate = Date()
-                requested = UInt64(result[0].requested)
-                
-                self.managedObjectContext?.delete(result[0])
-                
-            }
-            
-            let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: self.managedObjectContext!) as! CacheObject
-            
-            entity.setValue(forKey, forKey: "identifier")
-            
-            let data = NSKeyedArchiver.archivedData(withRootObject: object)
-            entity.setValue(data, forKey: "object")
-            
-            entity.setValue(created, forKey: "created")
-            
-            entity.setValue(label, forKey: "label")
-            
-            entity.setValue(lastUpdate, forKey: "lastUpdate")
-            
-            entity.setValue(requested, forKey: "requested")
-            
-            do {
-                try self.managedObjectContext?.save()
-                return true
-            } catch {
-                return false
-            }
-        } catch {
-            return false
-        }
-    }
-    
-    func saveObject(forKey: String, object: NSObject) -> Bool {
-        return self.saveObject(forKey: forKey, object: object, label: SCGlobalOptions.Options.defaultLabel)
-    }
-    
-    /*func saveObject(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
+    func saveObject(forKey: String, object:NSObject, label: String) {
         let pMOC = self.initPrivateMOC()
         
-        pMOC.perform({
+        pMOC.performAndWait({
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
             let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: pMOC)
@@ -98,32 +44,60 @@ class SCCoreDataManager {
             fetchRequest.entity = entityDescription
             fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
             
-            
             do {
-                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
-                if result.count > 0 {
-                    pMOC.delete(result[0])
-                }
-                let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: pMOC) as! CacheObject
-                entity.setValue(forKey, forKey: "identifier")
                 
                 let data = NSKeyedArchiver.archivedData(withRootObject: object)
-                entity.setValue(data, forKey: "object")
                 
-                entity.setValue(Date(), forKey: "created")
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
+                if result.count > 0 {
+                    
+                }/*
+                
+                    let created = result[0].created!
+                    let requested = Int64(result[0].requested)
+                    
+                    result[0].object = data
+                    result[0].created = created
+                    result[0].label = label
+                    result[0].lastUpdate = Date()
+                    result[0].requested = requested
+                    
+                    //self.managedObjectContext?.delete(result[0])*/
+                    
+                else {
+                    let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: self.managedObjectContext!) as! CacheObject
+                    
+                    entity.setValue(forKey, forKey: "identifier")
+                    
+                    entity.setValue(data, forKey: "object")
+                    
+                    entity.setValue(Date(), forKey: "created")
+                    
+                    entity.setValue(label, forKey: "label")
+                    
+                    entity.setValue(Date(), forKey: "lastUpdate")
+                    
+                    entity.setValue(0, forKey: "requested")
+                }
                 
                 do {
                     try pMOC.save()
-                    answer(true, "")
+                    self.managedObjectContext?.performAndWait({
+                        do {
+                            try self.managedObjectContext?.save()
+                        } catch {
+                            SCLog.sharedInstance.write(function: "\(#function)", message: "Saving object in main context failed for object: " + forKey)
+                        }
+                    })
                 } catch {
-                    answer(false, "[CacheManager:save] -> Fehler beim Speichern")
+                    SCLog.sharedInstance.write(function: "\(#function)", message: "Saving object in private context failed for object: " + forKey)
                 }
             } catch {
-                answer(false, "")
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Fetching Data failed for object: " + forKey)
             }
         })
         
-    }*/
+    }
     
     func getObject(forKey: String, answer: @escaping (Bool, NSObject?) -> ()) {
         let pMOC = self.initPrivateMOC()
@@ -142,6 +116,7 @@ class SCCoreDataManager {
                 var answerObject:NSObject?
                 if !result.isEmpty {
                     if let coObject = result[0].object {
+                        self.updateRequestRefCounter(forKey: forKey)
                         if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                             answerObject = retrievedObject
                         }
@@ -150,35 +125,9 @@ class SCCoreDataManager {
                 answer(true, answerObject)
             } catch {
                 answer(false, nil)
-                fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Getting object failed for: " + forKey)
             }
         })
-    }
-    
-    func getObject(forKey: String) -> NSObject? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
-        
-        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
-        
-        fetchRequest.entity = entityDescription
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
-        
-        
-        do {
-            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
-            var answerObject:NSObject?
-            if !result.isEmpty {
-                if let coObject = result[0].object {
-                    if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
-                        answerObject = retrievedObject
-                    }
-                }
-            }
-            return answerObject
-        } catch {
-            fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
-        }
-        return nil
     }
     
     func getObjects(byLabel: String, answer: @escaping (Bool, [NSObject]?) ->()) {
@@ -200,6 +149,7 @@ class SCCoreDataManager {
                 if !result.isEmpty {
                     for rawObj in result {
                         if let coObject = rawObj.object {
+                            self.updateRequestRefCounter(forKey: rawObj.identifier!)
                             if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                                 answerObjects.append(retrievedObject)
                             }
@@ -209,41 +159,46 @@ class SCCoreDataManager {
                 answer(true, answerObjects)
             } catch {
                 answer(false, nil)
-                fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Objects not found for label: " + byLabel)
             }
         })
     }
     
-    func getObjects(byLabel: String) -> [NSObject]? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+    func updateRequestRefCounter(forKey: String) {
+        let pMOC = self.initPrivateMOC()
         
-        let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: self.managedObjectContext!)
-        
-        fetchRequest.entity = entityDescription
-        fetchRequest.predicate = NSPredicate(format: "label == %@", byLabel)
-        
-        
-        do {
-            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
-            var answerObjects = [NSObject]()
+        pMOC.perform({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
             
-            if !result.isEmpty {
-                print(result)
-                for rawObj in result {
-                    if let coObject = rawObj.object {
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
-                            answerObjects.append(retrievedObject)
-                        }
-                    }
+            let entityDescription = NSEntityDescription.entity(forEntityName: "CacheObject", in: pMOC)
+            
+            fetchRequest.entity = entityDescription
+            fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
+            
+            
+            do {
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
+                if !result.isEmpty {
+                    result[0].requested += 1
                 }
-            } else {
                 
+                do {
+                    try pMOC.save()
+                    self.managedObjectContext?.performAndWait({
+                        do {
+                            try self.managedObjectContext?.save()
+                        } catch {
+                            SCLog.sharedInstance.write(function: "\(#function)", message: "Update ref counter in main context failed for object: " + forKey)
+                        }
+                    })
+                } catch {
+                    SCLog.sharedInstance.write(function: "\(#function)", message: "Update ref counter in private context failed for object: " + forKey)
+                }
+                
+            } catch {
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Failed object update at fetching information for object: " + forKey)
             }
-            return answerObjects
-        } catch {
-            fatalError("[CacheManager:getObjects] -> Fehler beim Lesen von Daten")
-        }
-        return nil
+        })
     }
     
     func getAllObjects(answer: @escaping (Bool, [NSObject]?) -> ()) {
@@ -269,7 +224,7 @@ class SCCoreDataManager {
                 answer(true, answerArr)
             } catch {
                 answer(false, nil)
-                fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Error while reading data")
             }
         })
     }
@@ -297,51 +252,93 @@ class SCCoreDataManager {
                 answer(dict)
             } catch {
                 answer(nil)
-                fatalError("[CacheManager:getObject] -> Fehler beim Lesen von Daten")
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Error while reading data")
             }
         })
     }
     
-   func deleteObject(forKey: String) -> Bool {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
-        
-        do {
-            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
+    func delete(forKey: String, answer: @escaping (Bool) -> ()) {
+        let pMOC = initPrivateMOC()
+    
+        pMOC.performAndWait({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
+            fetchRequest.predicate = NSPredicate(format: "identifier == %@", forKey)
             
-            for cacheObject in result {
-                self.managedObjectContext?.delete(cacheObject)
+            do {
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
+                
+                for cacheObject in result {
+                    pMOC.delete(cacheObject)
+                }
+                
+                do {
+                    try pMOC.save()
+                    self.managedObjectContext?.performAndWait({
+                        do {
+                            try self.managedObjectContext?.save()
+                            answer(true)
+                        } catch {
+                            SCLog.sharedInstance.write(function: "\(#function)", message: "Failed to delete data in main contect for object: " + forKey)
+                            answer(false)
+                        }
+                    })
+                } catch {
+                    SCLog.sharedInstance.write(function: "\(#function)", message: "Failed to delete data in private context for object: " + forKey)
+                    answer(false)
+                }
+            } catch {
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Failed to delete data for object: " + forKey)
+                answer(false)
             }
-        } catch {
-            return false
-        }
-        
-        do {
-            try self.managedObjectContext?.save()
-        } catch {
-            return false
-        }
-        return true
+        })
+    
     }
     
-  func clearCache() -> Bool {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
+    func clearCoreData(cleared: @escaping (Bool) -> ()) {
         
-        do {
-            let result = try self.managedObjectContext?.fetch(fetchRequest) as! [CacheObject]
+        self.managedObjectContext?.performAndWait({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
+            let request = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             
-            for cacheObject in result {
-                self.managedObjectContext?.delete(cacheObject)
+            do {
+                try self.managedObjectContext?.execute(request)
+                try self.managedObjectContext?.save()
+                cleared(true)
+            } catch {
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Failed to clear CoreData")
+                cleared(false)
             }
-        } catch {
-            return false
-        }
+        })
+        /*
+        let pMOC = self.initPrivateMOC()
         
-        do {
-            try self.managedObjectContext?.save()
-        } catch {
-            return false
-        }
-        return true
+        pMOC.performAndWait({
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CacheObject")
+            
+            do {
+                let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
+                
+                for cacheObject in result {
+                    pMOC.delete(cacheObject)
+                }
+            } catch {
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Failed to fetch Objects for clearing storage")
+            }
+            
+            do {
+                try pMOC.save()
+                self.managedObjectContext?.performAndWait({
+                    do {
+                        try self.managedObjectContext?.save()
+                        cleared(true)
+                    } catch {
+                        SCLog.sharedInstance.write(function: "\(#function)", message: "Saving object in main context failed")
+                    }
+                })
+            } catch {
+                SCLog.sharedInstance.write(function: "\(#function)", message: "Saving object in private context failed")
+            }
+        })*/
+        
     }
 }

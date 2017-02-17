@@ -26,6 +26,11 @@ open class SCManager {
         self.init(cacheMode: cacheMode)
     }
     
+    public convenience init(cacheMode: CacheMode, cacheLimit: Int, debugInfo: Bool) {
+        SCGlobalOptions.Options.debugMode = debugInfo
+        self.init(cacheMode: cacheMode, cacheLimit: cacheLimit)
+    }
+    
     public init(cacheMode: CacheMode) {
         SCGlobalOptions.Options.cacheMode = cacheMode
 
@@ -41,48 +46,21 @@ open class SCManager {
     deinit {
         
     }
-
-    /*fileprivate func save(_ forKey: String, object: NSObject, answer: @escaping (Bool, String) -> ()) {
-        if let cdm = coreDataManger {
-            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(execute: {
-                cdm.saveObject(forKey, object: object, answer: {
-                    success, message in
-                    
-                    if let cam = self.cacheManager {
-                        cam.saveObjectToCache(forKey, object: object)
-                        print("[SCManager:save] -> Objekt in NSCache gelegt")
-                    }
-                    
-                    answer(success, message)
-                })
-            })
-        }
-    }*/
     
-    open func save(forKey: String, object: NSObject) -> Bool {
-        if let cdm = coreDataManger {
-            if cdm.saveObject(forKey: forKey, object: object) {
-                if let cam = self.cacheManager {
-                    cam.saveObjectToCache(forKey, object: object)
-                    print("[SCManager:save] -> Objekt in NSCache gelegt")
-                }
-                return true
-            }
-        }
-        return false
+    open func save(forKey: String, object: NSObject) {
+        self.save(forKey: forKey, object: object, label: SCGlobalOptions.Options.defaultLabel)
     }
     
-    open func save(forKey: String, object: NSObject, label: String) -> Bool {
+    open func save(forKey: String, object: NSObject, label: String) {
         if let cdm = coreDataManger {
-            if cdm.saveObject(forKey: forKey, object: object, label: label) {
+            SCGlobalOptions.Options.concurrentSCSQueue.sync(execute: {
+                cdm.saveObject(forKey: forKey, object: object, label: label)
                 if let cam = self.cacheManager {
                     cam.saveObjectToCache(forKey, object: object)
                     print("[SCManager:save] -> Objekt in NSCache gelegt")
                 }
-                return true
-            }
+            })
         }
-        return false
     }
     
     open func get(forKey: String, answer: @escaping (Bool, NSObject?) -> ()) {
@@ -120,30 +98,6 @@ open class SCManager {
         }
     }
     
-    open func get(forKey: String) -> NSObject? {
-        if let cam = cacheManager {
-            if let cacheObj = cam.getObjectFromCache(forKey) {
-                print("[SCManager:get] -> Objekt aus NSCache geladen")
-                return cacheObj
-            } else {
-                if let cdm = coreDataManger {
-                    let cdObject = cdm.getObject(forKey: forKey)
-                    if let cdData = cdObject {
-                        cam.saveObjectToCache(forKey, object: cdData)
-                        print("[SCManager:get] -> Objekt nach nicht auffinden gecacht")
-                    }
-                    print("[SCManager:get] -> Objekt nicht in NSCache, deshalb aus CoreData")
-                    return cdm.getObject(forKey: forKey)
-                }
-            }
-        } else {
-            if let cdm = coreDataManger {
-                return cdm.getObject(forKey: forKey)
-            }
-        }
-        return nil
-    }
-    
     open func get(byLabel: String, answer: @escaping (Bool, [NSObject]?) -> ()) {
         if let cdm = coreDataManger {
             SCGlobalOptions.Options.concurrentSCSQueue.async(execute: {
@@ -156,36 +110,40 @@ open class SCManager {
         }
     }
     
-    open func get(byLabel: String) -> [NSObject]? {
+    open func delete(forKey: String, answer: @escaping (Bool) -> ()) {
         if let cdm = coreDataManger {
-            return cdm.getObjects(byLabel: byLabel)
-        }
-        return nil
-    }
-    
-    open func delete(forKey: String) -> Bool {
-        var answer = false
-        if let cdm = coreDataManger {
-            if cdm.deleteObject(forKey: forKey) {
-                answer = true
-            }
-        }
-        if let cam = cacheManager {
-            cam.deletObjectFromCache(forKey)
-        }
-        return answer
-    }
-    
-    open func clear()  -> Bool{
-        if let cdm = coreDataManger {
-            if cdm.clearCache() {
-                if let cam = cacheManager {
-                    cam.clearTotalCache()
+            cdm.delete(forKey: forKey, answer: {
+                success in
+                if success {
+                    if let cam = self.cacheManager {
+                        cam.deletObjectFromCache(forKey)
+                    }
+                    answer(true)
+                } else {
+                    answer(false)
                 }
-                return true
-            }
+            })
+        } else {
+            answer(false)
         }
-        return false
+    }
+    
+    open func clear(cleared: @escaping (Bool) -> ()){
+        if let cdm = coreDataManger {
+            cdm.clearCoreData(cleared: {
+                success in
+                if success {
+                    if let cam = self.cacheManager {
+                        cam.clearTotalCache()
+                    }
+                    cleared(true)
+                } else {
+                    cleared(false)
+                }
+            })
+        } else {
+            cleared(false)
+        }
     }
     
     open func getAll(answer: @escaping (Bool, [NSObject]?) -> ()) {
@@ -197,6 +155,8 @@ open class SCManager {
                     answer(success, data)
                 })
             })
+        } else {
+            answer(false, nil)
         }
     }
     
