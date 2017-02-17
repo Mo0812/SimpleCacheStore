@@ -26,6 +26,11 @@ open class SCManager {
         self.init(cacheMode: cacheMode)
     }
     
+    public convenience init(cacheMode: CacheMode, cacheLimit: Int, debugInfo: Bool) {
+        SCGlobalOptions.Options.debugMode = debugInfo
+        self.init(cacheMode: cacheMode, cacheLimit: cacheLimit)
+    }
+    
     public init(cacheMode: CacheMode) {
         SCGlobalOptions.Options.cacheMode = cacheMode
 
@@ -105,29 +110,40 @@ open class SCManager {
         }
     }
     
-    open func delete(forKey: String) -> Bool {
-        var answer = false
+    open func delete(forKey: String, answer: @escaping (Bool) -> ()) {
         if let cdm = coreDataManger {
-            if cdm.deleteObject(forKey: forKey) {
-                answer = true
-            }
+            cdm.delete(forKey: forKey, answer: {
+                success in
+                if success {
+                    if let cam = self.cacheManager {
+                        cam.deletObjectFromCache(forKey)
+                    }
+                    answer(true)
+                } else {
+                    answer(false)
+                }
+            })
+        } else {
+            answer(false)
         }
-        if let cam = cacheManager {
-            cam.deletObjectFromCache(forKey)
-        }
-        return answer
     }
     
-    open func clear()  -> Bool{
+    open func clear(cleared: @escaping (Bool) -> ()){
         if let cdm = coreDataManger {
-            if cdm.clearCache() {
-                if let cam = cacheManager {
-                    cam.clearTotalCache()
+            cdm.clearCoreData(cleared: {
+                success in
+                if success {
+                    if let cam = self.cacheManager {
+                        cam.clearTotalCache()
+                    }
+                    cleared(true)
+                } else {
+                    cleared(false)
                 }
-                return true
-            }
+            })
+        } else {
+            cleared(false)
         }
-        return false
     }
     
     open func getAll(answer: @escaping (Bool, [NSObject]?) -> ()) {
@@ -139,6 +155,8 @@ open class SCManager {
                     answer(success, data)
                 })
             })
+        } else {
+            answer(false, nil)
         }
     }
     

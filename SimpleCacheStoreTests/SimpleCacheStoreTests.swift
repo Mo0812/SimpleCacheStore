@@ -11,10 +11,10 @@ import XCTest
 
 class SimpleCacheStoreTests: XCTestCase {
     
-    let scm = SCManager(cacheMode: .rebuild, cacheLimit: 100)
+    let scm = SCManager(cacheMode: .rebuild, cacheLimit: 100, debugInfo: true)
     var objContainer: [TestObject]!
     var otherContainer: [TestObject]!
-    var objCounter = 50
+    var objCounter = 100
     
     override func setUp() {
         super.setUp()
@@ -45,7 +45,6 @@ class SimpleCacheStoreTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-        //scm.clear()
         objContainer.removeAll()
         otherContainer.removeAll()
     }
@@ -102,6 +101,49 @@ class SimpleCacheStoreTests: XCTestCase {
             XCTAssertNil(error, "Something went horribly wrong")
             
         }
+    }
+    
+    func testRemoveObject() {
+        let expec = expectation(description: "object 3 removed")
+        
+        scm.delete(forKey: "testobj3", answer: {
+            success in
+            XCTAssertTrue(success == true, "No match")
+            
+            self.scm.get(forKey: "testobj3", answer: {
+                success, obj in
+                XCTAssertTrue(success == false, "No match")
+            })
+            
+            expec.fulfill()
+        })
+        
+        self.waitForExpectations(timeout: 10, handler: {
+            error in
+            XCTAssertNil(error, "Something went horribly wrong")
+        })
+    }
+    
+    func testClear() {
+        let expec = expectation(description: "Remove all objects")
+        
+        scm.clear(cleared: {
+            success in
+            XCTAssertTrue(success == true, "No match")
+            
+            self.scm.get(forKey: "testobj4", answer: {
+                success, obj in
+                XCTAssertTrue(success == false, "No match")
+            })
+            
+            expec.fulfill()
+        })
+        
+        self.waitForExpectations(timeout: 10, handler: {
+            error in
+            XCTAssertNil(error, "Something went horribly wrong")
+        })
+        
     }
     
 //    func testOverwrite() {
