@@ -35,7 +35,7 @@ class SCLog {
                 
             }
             catch {
-                print(SCGlobalOptions.Options.scsDebugIdentifier + "[\(#function)]" + " -> Error writing file")
+                print(SCGlobalOptions.Options.scsDebugIdentifier + "[\(#function)]" + " -> Error writing file\n")
             }
             
             //reading

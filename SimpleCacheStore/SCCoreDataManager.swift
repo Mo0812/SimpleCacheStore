@@ -50,35 +50,22 @@ class SCCoreDataManager {
                 
                 let result = try pMOC.fetch(fetchRequest) as! [CacheObject]
                 if result.count > 0 {
+                    pMOC.delete(result[0])
                     
-                }/*
-                
-                    let created = result[0].created!
-                    let requested = Int64(result[0].requested)
-                    
-                    result[0].object = data
-                    result[0].created = created
-                    result[0].label = label
-                    result[0].lastUpdate = Date()
-                    result[0].requested = requested
-                    
-                    //self.managedObjectContext?.delete(result[0])*/
-                    
-                else {
-                    let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: self.managedObjectContext!) as! CacheObject
-                    
-                    entity.setValue(forKey, forKey: "identifier")
-                    
-                    entity.setValue(data, forKey: "object")
-                    
-                    entity.setValue(Date(), forKey: "created")
-                    
-                    entity.setValue(label, forKey: "label")
-                    
-                    entity.setValue(Date(), forKey: "lastUpdate")
-                    
-                    entity.setValue(0, forKey: "requested")
                 }
+                let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: self.managedObjectContext!) as! CacheObject
+                
+                entity.setValue(forKey, forKey: "identifier")
+                
+                entity.setValue(data, forKey: "object")
+                
+                entity.setValue(Date(), forKey: "created")
+                
+                entity.setValue(label, forKey: "label")
+                
+                entity.setValue(Date(), forKey: "lastUpdate")
+                
+                entity.setValue(0, forKey: "requested")
                 
                 do {
                     try pMOC.save()

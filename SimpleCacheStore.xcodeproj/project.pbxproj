@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C50E97011E568ADA00A507C8 /* fullscreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C50E97001E568ADA00A507C8 /* fullscreen.jpg */; };
+		C50E97021E568ADA00A507C8 /* fullscreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C50E97001E568ADA00A507C8 /* fullscreen.jpg */; };
 		C51928311E4144C300CE0BD1 /* SimpleCacheStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */; };
 		C51928331E4144C300CE0BD1 /* SimpleCacheStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59316271D3958FA00C3424C /* SimpleCacheStore.framework */; };
 		C519283A1E4145A900CE0BD1 /* TestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928391E4145A900CE0BD1 /* TestObject.swift */; };
@@ -33,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C50E97001E568ADA00A507C8 /* fullscreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fullscreen.jpg; sourceTree = "<group>"; };
 		C519282E1E4144C300CE0BD1 /* SimpleCacheStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleCacheStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCacheStoreTests.swift; sourceTree = "<group>"; };
 		C51928321E4144C300CE0BD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -144,6 +147,7 @@
 		C59316291D3958FA00C3424C /* SimpleCacheStore */ = {
 			isa = PBXGroup;
 			children = (
+				C50E97001E568ADA00A507C8 /* fullscreen.jpg */,
 				C593162A1D3958FA00C3424C /* SimpleCacheStore.h */,
 				C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */,
 				C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */,
@@ -251,6 +255,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C50E97021E568ADA00A507C8 /* fullscreen.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +263,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C50E97011E568ADA00A507C8 /* fullscreen.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +445,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = MK.SimpleCacheStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -460,6 +467,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = MK.SimpleCacheStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import UIKit
 @testable import SimpleCacheStore
 
 class SimpleCacheStoreTests: XCTestCase {
@@ -14,11 +15,14 @@ class SimpleCacheStoreTests: XCTestCase {
     let scm = SCManager(cacheMode: .rebuild, cacheLimit: 100, debugInfo: true)
     var objContainer: [TestObject]!
     var otherContainer: [TestObject]!
-    var objCounter = 100
+    var objCounter = 50
     
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        let bundle = Bundle(identifier: "MK.SimpleCacheStore")
+        let path = bundle?.path(forResource: "fullscreen", ofType: "jpg")
+        let myImage = UIImage(contentsOfFile: path!)
         
         objContainer = [TestObject]()
         otherContainer = [TestObject]()
@@ -27,7 +31,7 @@ class SimpleCacheStoreTests: XCTestCase {
             let objKey = "testobj" + String(i)
             let objName = "Object " + String(i)
             let objStatus = "Status " + String(i)
-            let obj = TestObject(name: objName, status: objStatus)
+            let obj = TestObject(name: objName, status: objStatus, image: myImage!)
             var label = "other"
             
             if i < objCounter/2 {
@@ -45,6 +49,9 @@ class SimpleCacheStoreTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+        scm.clear(cleared: {
+            success in
+        })
         objContainer.removeAll()
         otherContainer.removeAll()
     }
@@ -144,6 +151,10 @@ class SimpleCacheStoreTests: XCTestCase {
             XCTAssertNil(error, "Something went horribly wrong")
         })
         
+    }
+    
+    func testLogPrint() {
+        scm.printLog()
     }
     
 //    func testOverwrite() {

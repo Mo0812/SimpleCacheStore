@@ -7,25 +7,29 @@
 //
 
 import Foundation
+import UIKit
 
 class TestObject: NSObject, NSCoding {
     var name: String?
     var status: String?
+    var image: UIImage?
     
-    init(name: String, status: String) {
+    init(name: String, status: String, image: UIImage) {
         self.name = name
         self.status = status
+        self.image = image
     }
     
     convenience required init?(coder aDecoder: NSCoder) {
-        guard let name = aDecoder.decodeObject(forKey: "name") as? String, let status = aDecoder.decodeObject(forKey: "status") as? String else {
+        guard let name = aDecoder.decodeObject(forKey: "name") as? String, let status = aDecoder.decodeObject(forKey: "status") as? String, let image = aDecoder.decodeObject(forKey: "image") as? UIImage else {
             return nil
         }
-        self.init(name: name, status: status)
+        self.init(name: name, status: status, image: image)
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.name, forKey: "name")
         aCoder.encode(self.status, forKey: "status")
+        aCoder.encode(self.image, forKey: "image")
     }
 }

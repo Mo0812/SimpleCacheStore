@@ -160,4 +160,14 @@ open class SCManager {
         }
     }
     
+    open func printLog() {
+        if let log = SCLog.sharedInstance.read() {
+            print(log)
+        }
+    }
+    
+    open func getLog() -> String? {
+        return SCLog.sharedInstance.read()
+    }
+    
 }
