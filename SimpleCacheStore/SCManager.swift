@@ -37,7 +37,7 @@ open class SCManager {
         coreDataManger = SCCoreDataManager()
         
         let cacheWalker = SCCacheWalker()
-        cacheWalker.establishCacheFromPersistentObjects({ success in })
+        //cacheWalker.establishCacheFromPersistentObjects({ success in })
         
         cacheManager = SCCacheManager.sharedInstance
         
@@ -55,10 +55,10 @@ open class SCManager {
         if let cdm = coreDataManger {
             SCGlobalOptions.Options.concurrentSCSQueue.sync(execute: {
                 cdm.saveObject(forKey: forKey, object: object, label: label)
-                if let cam = self.cacheManager {
+                /*if let cam = self.cacheManager {
                     cam.saveObjectToCache(forKey, object: object)
                     print("[SCManager:save] -> Objekt in NSCache gelegt")
-                }
+                }*/
             })
         }
     }
@@ -111,35 +111,40 @@ open class SCManager {
     }
     
     open func delete(forKey: String, answer: @escaping (Bool) -> ()) {
+        if let cam = self.cacheManager {
+            cam.deletObjectFromCache(forKey)
+        }
         if let cdm = coreDataManger {
-            cdm.delete(forKey: forKey, answer: {
-                success in
-                if success {
-                    if let cam = self.cacheManager {
-                        cam.deletObjectFromCache(forKey)
+            SCGlobalOptions.Options.concurrentSCSQueue.sync(execute: {
+                cdm.delete(forKey: forKey, answer: {
+                    success in
+                    if success {
+                        answer(true)
+                    } else {
+                        answer(false)
                     }
-                    answer(true)
-                } else {
-                    answer(false)
-                }
+                })
             })
         } else {
             answer(false)
         }
     }
     
-    open func clear(cleared: @escaping (Bool) -> ()){
+    open func clear(cleared: @escaping (Bool) -> ()) {
+        if let cam = self.cacheManager {
+            cam.clearTotalCache()
+        }
         if let cdm = coreDataManger {
-            cdm.clearCoreData(cleared: {
-                success in
-                if success {
-                    if let cam = self.cacheManager {
-                        cam.clearTotalCache()
+            SCGlobalOptions.Options.concurrentSCSQueue.sync(execute: {
+                cdm.clearCoreData(cleared: {
+                    success in
+                    if success {
+                        
+                        cleared(true)
+                    } else {
+                        cleared(false)
                     }
-                    cleared(true)
-                } else {
-                    cleared(false)
-                }
+                })
             })
         } else {
             cleared(false)

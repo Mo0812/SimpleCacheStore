@@ -21,6 +21,7 @@
 		C59316331D39591600C3424C /* SCCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59316321D39591600C3424C /* SCCoreDataManager.swift */; };
 		C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */; };
 		C593163C1D395AD100C3424C /* CacheObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C593163A1D395AD100C3424C /* CacheObject.swift */; };
+		C5B93E911F708B4D00047B6B /* DataObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B93E901F708B4D00047B6B /* DataObject.swift */; };
 		C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E3B7611D42E68D0006D932 /* SCCacheWalker.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		C59316321D39591600C3424C /* SCCoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCoreDataManager.swift; sourceTree = "<group>"; };
 		C59316371D3959D400C3424C /* SimpleCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SimpleCache.xcdatamodel; sourceTree = "<group>"; };
 		C593163A1D395AD100C3424C /* CacheObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CacheObject.swift; path = ../CacheObject.swift; sourceTree = "<group>"; };
+		C5B93E901F708B4D00047B6B /* DataObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataObject.swift; sourceTree = "<group>"; };
 		C5E3B7611D42E68D0006D932 /* SCCacheWalker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCCacheWalker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				C593163A1D395AD100C3424C /* CacheObject.swift */,
+				C5B93E901F708B4D00047B6B /* DataObject.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -129,9 +132,9 @@
 		C593161D1D3958F900C3424C = {
 			isa = PBXGroup;
 			children = (
+				C59316281D3958FA00C3424C /* Products */,
 				C59316291D3958FA00C3424C /* SimpleCacheStore */,
 				C519282F1E4144C300CE0BD1 /* SimpleCacheStoreTests */,
-				C59316281D3958FA00C3424C /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -287,6 +290,7 @@
 				C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */,
 				C5E3B7621D42E68D0006D932 /* SCCacheWalker.swift in Sources */,
 				C59316381D3959D400C3424C /* SimpleCache.xcdatamodeld in Sources */,
+				C5B93E911F708B4D00047B6B /* DataObject.swift in Sources */,
 				C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */,
 				C565ABD11E56616C00225A76 /* SCLog.swift in Sources */,
 				C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */,

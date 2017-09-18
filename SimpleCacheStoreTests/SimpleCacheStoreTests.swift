@@ -15,7 +15,7 @@ class SimpleCacheStoreTests: XCTestCase {
     let scm = SCManager(cacheMode: .rebuild, cacheLimit: 100, debugInfo: true)
     var objContainer: [TestObject]!
     var otherContainer: [TestObject]!
-    var objCounter = 50
+    var objCounter = 20
     
     override func setUp() {
         super.setUp()
@@ -60,6 +60,8 @@ class SimpleCacheStoreTests: XCTestCase {
         
         let expec1 = expectation(description: "Object Random 1 async")
         let expec2 = expectation(description: "Object Random 2 async")
+        let expec12 = expectation(description: "Object Random 1.2 async")
+        let expec22 = expectation(description: "Object Random 2.2 async")
         
         let objIndex1 = Int(arc4random_uniform(UInt32(objContainer.count)))
         let objIndex2 = Int(arc4random_uniform(UInt32(otherContainer.count)))
@@ -72,12 +74,26 @@ class SimpleCacheStoreTests: XCTestCase {
             let swapObj = obj as! TestObject
             XCTAssertTrue(swapObj.name == self.objContainer[objIndex1].name, "No match")
             expec1.fulfill()
+            
+            self.scm.get(forKey: key1, answer: {
+                success, obj in
+                let swapObj = obj as! TestObject
+                XCTAssertTrue(swapObj.name == self.objContainer[objIndex1].name, "No match")
+                expec12.fulfill()
+            })
         })
         scm.get(forKey: key2, answer: {
             success, obj in
             let swapObj = obj as! TestObject
             XCTAssertTrue(swapObj.name == self.objContainer[objIndex2].name, "No match")
             expec2.fulfill()
+            
+            self.scm.get(forKey: key2, answer: {
+                success, obj in
+                let swapObj = obj as! TestObject
+                XCTAssertTrue(swapObj.name == self.objContainer[objIndex2].name, "No match")
+                expec22.fulfill()
+            })
         })
         
         self.waitForExpectations(timeout: 5, handler: { error in
@@ -186,7 +202,7 @@ class SimpleCacheStoreTests: XCTestCase {
                 expec.fulfill()
             })
 
-            self.waitForExpectations(timeout: 10) { error in
+            self.waitForExpectations(timeout: 100) { error in
                 XCTAssertNil(error, "Something went horribly wrong")
                 
             }

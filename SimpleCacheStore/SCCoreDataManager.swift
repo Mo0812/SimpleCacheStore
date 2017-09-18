@@ -53,11 +53,11 @@ class SCCoreDataManager {
                     pMOC.delete(result[0])
                     
                 }
-                let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: self.managedObjectContext!) as! CacheObject
+                let entity = NSEntityDescription.insertNewObject(forEntityName: "CacheObject", into: pMOC) as! CacheObject
                 
                 entity.setValue(forKey, forKey: "identifier")
                 
-                entity.setValue(data, forKey: "object")
+                entity.setValue("1", forKey: "object")
                 
                 entity.setValue(Date(), forKey: "created")
                 
@@ -66,6 +66,11 @@ class SCCoreDataManager {
                 entity.setValue(Date(), forKey: "lastUpdate")
                 
                 entity.setValue(0, forKey: "requested")
+                
+                let dataEntity = NSEntityDescription.insertNewObject(forEntityName: "DataObject", into: pMOC) as! DataObject
+                
+                dataEntity.setValue("1", forKey: "identifier")
+                dataEntity.setValue(data, forKey: "data")
                 
                 do {
                     try pMOC.save()
@@ -104,8 +109,20 @@ class SCCoreDataManager {
                 if !result.isEmpty {
                     if let coObject = result[0].object {
                         self.updateRequestRefCounter(forKey: forKey)
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
-                            answerObject = retrievedObject
+                        
+                        
+                        let objectRequest = NSFetchRequest<NSFetchRequestResult>()
+                        let objectDescription = NSEntityDescription.entity(forEntityName: "DataObject", in: pMOC)
+                        objectRequest.entity = objectDescription
+                        objectRequest.predicate = NSPredicate(format: "identifier == %@", coObject)
+                        
+                        let objectResult = try pMOC.fetch(objectRequest) as! [DataObject]
+                        if !objectResult.isEmpty {
+                            if let doObject = objectResult[0].data {
+                                if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: doObject) as? NSObject {
+                                    answerObject = retrievedObject
+                                }
+                            }
                         }
                     }
                 }
@@ -137,9 +154,9 @@ class SCCoreDataManager {
                     for rawObj in result {
                         if let coObject = rawObj.object {
                             self.updateRequestRefCounter(forKey: rawObj.identifier!)
-                            if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
+                            /*if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                                 answerObjects.append(retrievedObject)
-                            }
+                            }*/
                         }
                     }
                 }
@@ -203,9 +220,9 @@ class SCCoreDataManager {
                 var answerArr:[NSObject] = [NSObject]()
                 for cacheObject in result {
                     if let coObject = cacheObject.object {
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
+                        /*if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                             answerArr.append(retrievedObject)
-                        }
+                        }*/
                     }
                 }
                 answer(true, answerArr)
@@ -231,9 +248,9 @@ class SCCoreDataManager {
                 var dict: Dictionary<String, NSObject> = [String: NSObject]()
                 for cacheObject in result {
                     if let coObject = cacheObject.object, let id = cacheObject.identifier {
-                        if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
+                        /*if let retrievedObject = NSKeyedUnarchiver.unarchiveObject(with: coObject) as? NSObject {
                             dict[id] = retrievedObject
-                        }
+                        }*/
                     }
                 }
                 answer(dict)
@@ -265,7 +282,7 @@ class SCCoreDataManager {
                             try self.managedObjectContext?.save()
                             answer(true)
                         } catch {
-                            SCLog.sharedInstance.write(function: "\(#function)", message: "Failed to delete data in main contect for object: " + forKey)
+                            SCLog.sharedInstance.write(function: "\(#function)", message: "Failed to delete data in main contexFait for object: " + forKey)
                             answer(false)
                         }
                     })
