@@ -12,6 +12,8 @@
 		C51928311E4144C300CE0BD1 /* SimpleCacheStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */; };
 		C51928331E4144C300CE0BD1 /* SimpleCacheStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59316271D3958FA00C3424C /* SimpleCacheStore.framework */; };
 		C519283A1E4145A900CE0BD1 /* TestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51928391E4145A900CE0BD1 /* TestObject.swift */; };
+		C54164B21F742E1D00BA4253 /* StoredObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54164B11F742E1D00BA4253 /* StoredObject.swift */; };
+		C54164B31F74364B00BA4253 /* SimpleCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C59316361D3959D400C3424C /* SimpleCache.xcdatamodeld */; };
 		C565ABD11E56616C00225A76 /* SCLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C565ABD01E56616C00225A76 /* SCLog.swift */; };
 		C56BA4BA1D3EB52F00263ECE /* SCGlobalOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */; };
 		C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */; };
@@ -41,6 +43,7 @@
 		C51928301E4144C300CE0BD1 /* SimpleCacheStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCacheStoreTests.swift; sourceTree = "<group>"; };
 		C51928321E4144C300CE0BD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C51928391E4145A900CE0BD1 /* TestObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestObject.swift; sourceTree = "<group>"; };
+		C54164B11F742E1D00BA4253 /* StoredObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredObject.swift; sourceTree = "<group>"; };
 		C565ABD01E56616C00225A76 /* SCLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLog.swift; sourceTree = "<group>"; };
 		C56BA4B91D3EB52F00263ECE /* SCGlobalOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCGlobalOptions.swift; sourceTree = "<group>"; };
 		C56BA4BE1D3EB6FC00263ECE /* SCManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCManager.swift; sourceTree = "<group>"; };
@@ -116,6 +119,7 @@
 			children = (
 				C593163A1D395AD100C3424C /* CacheObject.swift */,
 				C5B93E901F708B4D00047B6B /* DataObject.swift */,
+				C54164B11F742E1D00BA4253 /* StoredObject.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -278,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C519283A1E4145A900CE0BD1 /* TestObject.swift in Sources */,
+				C54164B31F74364B00BA4253 /* SimpleCache.xcdatamodeld in Sources */,
 				C51928311E4144C300CE0BD1 /* SimpleCacheStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,6 +299,7 @@
 				C56BA4D91D3ED52500263ECE /* SCCacheManager.swift in Sources */,
 				C565ABD11E56616C00225A76 /* SCLog.swift in Sources */,
 				C56BA4BF1D3EB6FC00263ECE /* SCManager.swift in Sources */,
+				C54164B21F742E1D00BA4253 /* StoredObject.swift in Sources */,
 				C593163C1D395AD100C3424C /* CacheObject.swift in Sources */,
 				C59316331D39591600C3424C /* SCCoreDataManager.swift in Sources */,
 			);

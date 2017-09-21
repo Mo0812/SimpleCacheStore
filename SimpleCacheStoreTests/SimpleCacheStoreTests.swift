@@ -49,11 +49,11 @@ class SimpleCacheStoreTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-        scm.clear(cleared: {
+        /*scm.clear(cleared: {
             success in
         })
         objContainer.removeAll()
-        otherContainer.removeAll()
+        otherContainer.removeAll()*/
     }
     
     func testAsyncGet() {

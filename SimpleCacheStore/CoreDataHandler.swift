@@ -11,36 +11,19 @@ import CoreData
 
 class CoreDataHandler {
     
-    fileprivate var managedObjectContext: NSManagedObjectContext?
+    fileprivate var persistentContainer: NSPersistentContainer?
     
-    init(identifier: String, ressource: String) {
-        guard let coreDataUrl = Bundle(identifier: identifier)!.url(forResource: ressource, withExtension: "momd") else {
-            fatalError("[CacheManager:init] -> Couldnt find URL")
+    init(container: String) {
+        let persistentContainer = NSPersistentContainer(name: container)
+        persistentContainer.loadPersistentStores { (_, error) in
+            if let error = error {
+                fatalError("Failed to load Core Data stack: \(error)")
+            }
         }
-        guard let mom = NSManagedObjectModel(contentsOf: coreDataUrl) else {
-            fatalError("[CacheManager:init] -> Couldnt load MOM")
-        }
-        let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        self.managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        self.managedObjectContext?.persistentStoreCoordinator = psc
-        
-        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let docURL = urls[urls.endIndex-1]
-        /* The directory the application uses to store the Core Data store file.
-         This code uses a file named "DataModel.sqlite" in the application's documents directory.
-         */
-        let storeURL = docURL.appendingPathComponent(ressource + ".sqlite")
-        do {
-            try psc.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
-        } catch {
-            fatalError("[CoreDataHandler:init] -> \(error)")
-        }
-    
-        
     }
     
-    func getMOC() -> NSManagedObjectContext? {
-        return managedObjectContext
+    func getPersistentContainer() -> NSPersistentContainer? {
+        return self.persistentContainer
     }
     
 }
